@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  avatar        String?
+  createdAt     DateTime  @default(now())
+
+  memberships   UserColoc[]
+  assignedTasks Task[]    @relation("AssignedTasks")
+  completedTasks TaskHistory[]
+  scores        Score[]
+}
+
+model Colocation {
+  id          String    @id @default(cuid())
+  name        String
+  inviteCode  String    @unique @default(cuid())
+  createdAt   DateTime  @default(now())
+
+  members     UserColoc[]
+  tasks       Task[]
+  scores      Score[]
+}
+
+model UserColoc {
+  id          String    @id @default(cuid())
+  role        String    @default("member")
+  joinedAt    DateTime  @default(now())
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, colocId])
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String    @default("pending")
+  recurrence  String?
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  assignedToId String?
+  assignedTo  User?     @relation("AssignedTasks", fields: [assignedToId], references: [id])
+
+  history     TaskHistory[]
+}
+
+model TaskHistory {
+  id          String    @id @default(cuid())
+  completedAt DateTime  @default(now())
+
+  taskId      String
+  task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  completedById String
+  completedBy User    @relation(fields: [completedById], references: [id])
+}
+
+model Score {
+  id      String @id @default(cuid())
+  points  Int    @default(0)
+
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  colocId String
+  coloc   Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, colocId])
+}
