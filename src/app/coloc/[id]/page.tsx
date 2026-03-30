@@ -19,14 +19,14 @@ export default async function ColocPage({
     where: { id },
     include: {
       members: {
-        include: { user: { select: { id: true, name: true, avatar: true } } },
+        include: { user: { select: { id: true, username: true, avatar: true } } },
       },
       tasks: {
-        include: { assignedTo: { select: { id: true, name: true, avatar: true } } },
+        include: { assignedTo: { select: { id: true, username: true, avatar: true } } },
         orderBy: [{ status: 'asc' }, { dueDate: 'asc' }, { createdAt: 'desc' }],
       },
       scores: {
-        include: { user: { select: { id: true, name: true } } },
+        include: { user: { select: { id: true, username: true } } },
         orderBy: { points: 'desc' },
       },
     },
@@ -74,9 +74,9 @@ export default async function ColocPage({
             {coloc.members.map((m) => (
               <div key={m.id} className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-medium text-indigo-700">
-                  {m.user.name[0].toUpperCase()}
+                  {m.user.username[0].toUpperCase()}
                 </div>
-                <span className="text-sm text-gray-700">{m.user.name}</span>
+                <span className="text-sm text-gray-700">{m.user.username}</span>
                 {coloc.scores.find(s => s.userId === m.userId) && (
                   <span className="text-xs text-gray-400">
                     {coloc.scores.find(s => s.userId === m.userId)?.points} pts
@@ -90,7 +90,7 @@ export default async function ColocPage({
         {/* Ajouter une tâche */}
         <AddTaskForm
           colocId={coloc.id}
-          members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.name }))}
+          members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.username }))}
         />
 
         {/* Liste des tâches */}

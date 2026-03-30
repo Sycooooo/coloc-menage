@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { XP_REWARDS } from '@/lib/xp'
 
 export async function POST(
   _request: Request,
@@ -26,18 +27,23 @@ export async function POST(
     return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
   }
 
-  // Marquer comme fait + historique + points
+  const xpGained = XP_REWARDS[task.difficulty] ?? 50
+
   await prisma.$transaction([
     prisma.task.update({ where: { id }, data: { status: 'done' } }),
     prisma.taskHistory.create({
       data: { taskId: id, completedById: session.user.id },
     }),
+    prisma.user.update({
+      where: { id: session.user.id },
+      data: { xp: { increment: xpGained } },
+    }),
     prisma.score.upsert({
       where: { userId_colocId: { userId: session.user.id, colocId: task.colocId } },
-      update: { points: { increment: 10 } },
-      create: { userId: session.user.id, colocId: task.colocId, points: 10 },
+      update: { points: { increment: xpGained } },
+      create: { userId: session.user.id, colocId: task.colocId, points: xpGained },
     }),
   ])
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, xpGained })
 }

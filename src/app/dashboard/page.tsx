@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   const colocs = await prisma.colocation.findMany({
     where: { members: { some: { userId: session.user.id } } },
     include: {
-      members: { include: { user: { select: { id: true, name: true } } } },
+      members: { include: { user: { select: { id: true, username: true } } } },
       tasks: { where: { status: 'pending' } },
     },
   })
@@ -25,7 +25,9 @@ export default async function DashboardPage() {
           <h1 className="text-xl font-bold text-gray-900">Coloc Ménage</h1>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">Bonjour, {session.user.name}</span>
+          <Link href="/profile" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">
+            👤 {session.user.name}
+          </Link>
           <form
             action={async () => {
               'use server'
@@ -91,6 +93,7 @@ export default async function DashboardPage() {
                       {coloc.members.length} colocataire{coloc.members.length > 1 ? 's' : ''} ·{' '}
                       {coloc.tasks.length} tâche{coloc.tasks.length > 1 ? 's' : ''} en attente
                     </p>
+
                   </div>
                   <div className="flex -space-x-2">
                     {coloc.members.slice(0, 4).map((m) => (
@@ -98,7 +101,7 @@ export default async function DashboardPage() {
                         key={m.id}
                         className="w-8 h-8 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center text-xs font-medium text-indigo-700"
                       >
-                        {m.user.name[0].toUpperCase()}
+                        {m.user.username[0].toUpperCase()}
                       </div>
                     ))}
                   </div>

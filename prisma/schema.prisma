@@ -8,10 +8,10 @@ datasource db {
 
 model User {
   id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
+  username      String    @unique
   password      String
   avatar        String?
+  xp            Int       @default(0)
   createdAt     DateTime  @default(now())
 
   memberships   UserColoc[]
@@ -50,6 +50,7 @@ model Task {
   title       String
   description String?
   status      String    @default("pending")
+  difficulty  String    @default("medium")
   recurrence  String?
   dueDate     DateTime?
   createdAt   DateTime  @default(now())

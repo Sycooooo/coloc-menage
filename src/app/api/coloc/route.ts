@@ -42,7 +42,7 @@ export async function GET() {
       members: { some: { userId: session.user.id } },
     },
     include: {
-      members: { include: { user: { select: { id: true, name: true, avatar: true } } } },
+      members: { include: { user: { select: { id: true, username: true, avatar: true } } } },
     },
   })
 
