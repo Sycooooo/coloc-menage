@@ -57,6 +57,8 @@ model Task {
   description String?
   status      String    @default("pending")
   difficulty  String    @default("medium")
+  category    String?   // "cleaning", "cooking", "sport", "maintenance", "admin"
+  room        String?   // "salon", "cuisine", "sdb", "chambre", "exterieur"
   recurrence  String?
   dueDate     DateTime?
   createdAt   DateTime  @default(now())
@@ -146,4 +148,16 @@ model UserAchievement {
   achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
 
   @@unique([userId, achievementId])
+}
+
+// === Templates de quêtes ===
+
+model QuestTemplate {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  category      String    // "cleaning", "cooking", "sport", "maintenance", "admin"
+  room          String?   // "salon", "cuisine", "sdb", "chambre", "exterieur"
+  difficulty    String    @default("medium")
+  recurrence    String    @default("weekly") // "daily", "weekly", "monthly"
 }

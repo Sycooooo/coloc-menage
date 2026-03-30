@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { XP_REWARDS, DIFFICULTY_LABELS, DIFFICULTY_COLORS } from '@/lib/xp'
+import { XP_REWARDS, DIFFICULTY_LABELS, DIFFICULTY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, ROOM_LABELS } from '@/lib/xp'
 import { api } from '@/lib/api'
 import type { Task } from '@/types'
 
@@ -114,6 +114,16 @@ export default function TaskList({
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DIFFICULTY_COLORS[task.difficulty]}`}>
                       {DIFFICULTY_LABELS[task.difficulty]} · +{XP_REWARDS[task.difficulty]} XP
                     </span>
+                    {task.category && (
+                      <span className="text-xs text-gray-500">
+                        {CATEGORY_ICONS[task.category]} {CATEGORY_LABELS[task.category]}
+                      </span>
+                    )}
+                    {task.room && (
+                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        {ROOM_LABELS[task.room]}
+                      </span>
+                    )}
                     {task.assignedTo && (
                       <span className="text-xs text-gray-500">
                         👤 {task.assignedTo.username}

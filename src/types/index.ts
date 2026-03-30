@@ -48,6 +48,8 @@ export type Task = {
   description: string | null
   status: string
   difficulty: string
+  category: string | null
+  room: string | null
   recurrence: string | null
   dueDate: Date | null
   createdAt: Date

@@ -68,6 +68,30 @@ export const DIFFICULTY_COLORS: Record<string, string> = {
   hard: 'bg-red-100 text-red-700',
 }
 
+export const CATEGORY_LABELS: Record<string, string> = {
+  cleaning: 'Ménage',
+  cooking: 'Cuisine',
+  sport: 'Sport',
+  maintenance: 'Entretien',
+  admin: 'Administratif',
+}
+
+export const CATEGORY_ICONS: Record<string, string> = {
+  cleaning: '🧹',
+  cooking: '🍳',
+  sport: '💪',
+  maintenance: '🔧',
+  admin: '📋',
+}
+
+export const ROOM_LABELS: Record<string, string> = {
+  salon: 'Salon',
+  cuisine: 'Cuisine',
+  sdb: 'Salle de bain',
+  chambre: 'Chambre',
+  exterieur: 'Extérieur',
+}
+
 export const RARITY_LABELS: Record<string, string> = {
   common: 'Commun',
   rare: 'Rare',

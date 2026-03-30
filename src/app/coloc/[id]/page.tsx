@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import TaskList from '@/components/TaskList'
 import AddTaskForm from '@/components/AddTaskForm'
+import GenerateQuests from '@/components/GenerateQuests'
 
 export default async function ColocPage({
   params,
@@ -86,6 +87,9 @@ export default async function ColocPage({
             ))}
           </div>
         </div>
+
+        {/* Générer des quêtes (admin seulement) */}
+        {isAdmin && <GenerateQuests colocId={coloc.id} />}
 
         {/* Ajouter une tâche */}
         <AddTaskForm
