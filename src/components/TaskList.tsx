@@ -16,19 +16,33 @@ export default function TaskList({
 }) {
   const router = useRouter()
   const [completing, setCompleting] = useState<string | null>(null)
-  const [xpPopup, setXpPopup] = useState<{ taskId: string; xp: number } | null>(null)
+  const [popup, setPopup] = useState<{
+    taskId: string
+    xp: number
+    coins: number
+    streak: number
+    multiplier: number
+    achievements: { name: string; icon: string }[]
+  } | null>(null)
 
   const pending = tasks.filter((t) => t.status === 'pending')
   const done = tasks.filter((t) => t.status === 'done')
 
-  async function completeTask(taskId: string, difficulty: string) {
+  async function completeTask(taskId: string) {
     setCompleting(taskId)
     const data = await api.post(`/api/tasks/${taskId}/complete`)
-    setXpPopup({ taskId, xp: data.xpGained })
+    setPopup({
+      taskId,
+      xp: data.xpGained,
+      coins: data.coinsGained,
+      streak: data.streak,
+      multiplier: data.streakMultiplier,
+      achievements: data.newAchievements || [],
+    })
     setTimeout(() => {
-      setXpPopup(null)
+      setPopup(null)
       router.refresh()
-    }, 1500)
+    }, 2500)
     setCompleting(null)
   }
 
@@ -58,15 +72,30 @@ export default function TaskList({
                 key={task.id}
                 className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4 relative overflow-hidden"
               >
-                {/* Popup XP */}
-                {xpPopup?.taskId === task.id && (
+                {/* Popup récompenses */}
+                {popup?.taskId === task.id && (
                   <div className="absolute inset-0 bg-indigo-600 flex items-center justify-center rounded-xl animate-pulse">
-                    <span className="text-white font-bold text-xl">+{xpPopup.xp} XP ⭐</span>
+                    <div className="text-center text-white">
+                      <div className="font-bold text-xl">+{popup.xp} XP ⭐</div>
+                      {popup.coins > 0 && (
+                        <div className="text-sm mt-1">+{popup.coins} coins 🪙</div>
+                      )}
+                      {popup.multiplier > 1 && (
+                        <div className="text-xs mt-1 opacity-80">
+                          Streak x{popup.multiplier} 🔥 ({popup.streak}j)
+                        </div>
+                      )}
+                      {popup.achievements.map((a) => (
+                        <div key={a.name} className="text-sm mt-1 bg-white/20 rounded px-2 py-0.5">
+                          {a.icon} {a.name} débloqué !
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
                 <button
-                  onClick={() => completeTask(task.id, task.difficulty)}
+                  onClick={() => completeTask(task.id)}
                   disabled={completing === task.id}
                   className="w-7 h-7 rounded-full border-2 border-gray-300 hover:border-indigo-500 hover:bg-indigo-50 transition flex-shrink-0 disabled:opacity-50"
                   title="Marquer comme fait"

@@ -7,17 +7,23 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  password      String
-  avatar        String?
-  xp            Int       @default(0)
-  createdAt     DateTime  @default(now())
+  id              String    @id @default(cuid())
+  username        String    @unique
+  password        String
+  avatar          String?
+  xp              Int       @default(0)
+  currency        Int       @default(0)
+  currentStreak   Int       @default(0)
+  longestStreak   Int       @default(0)
+  lastActiveDate  DateTime?
+  createdAt       DateTime  @default(now())
 
-  memberships   UserColoc[]
-  assignedTasks Task[]    @relation("AssignedTasks")
-  completedTasks TaskHistory[]
-  scores        Score[]
+  memberships     UserColoc[]
+  assignedTasks   Task[]    @relation("AssignedTasks")
+  completedTasks  TaskHistory[]
+  scores          Score[]
+  items           UserItem[]
+  achievements    UserAchievement[]
 }
 
 model Colocation {
@@ -86,4 +92,58 @@ model Score {
   coloc   Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
 
   @@unique([userId, colocId])
+}
+
+// === Boutique ===
+
+model ShopItem {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  price       Int
+  type        String    // "avatar", "decoration", "badge_style"
+  rarity      String    @default("common") // "common", "rare", "epic", "legendary"
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+
+  buyers      UserItem[]
+}
+
+model UserItem {
+  id          String    @id @default(cuid())
+  purchasedAt DateTime  @default(now())
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemId      String
+  item        ShopItem  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+}
+
+// === Achievements ===
+
+model Achievement {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  icon        String    // emoji
+  condition   String    // ex: "tasks_completed:1", "streak:7", "hard_tasks:10"
+  reward      Int       @default(0) // coins gagnes en debloquant
+
+  unlockedBy  UserAchievement[]
+}
+
+model UserAchievement {
+  id          String    @id @default(cuid())
+  unlockedAt  DateTime  @default(now())
+
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
 }

@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
-import { getLevel, getXpForNextLevel } from '@/lib/xp'
+import { getLevel, getXpForNextLevel, getStreakMultiplier } from '@/lib/xp'
 import Link from 'next/link'
 import AvatarUpload from '@/components/AvatarUpload'
 
@@ -13,6 +13,7 @@ export default async function ProfilePage() {
     where: { id: session.user.id },
     include: {
       completedTasks: { include: { task: true } },
+      achievements: { include: { achievement: true } },
     },
   })
 
@@ -21,6 +22,11 @@ export default async function ProfilePage() {
   const level = getLevel(user.xp)
   const xpInfo = getXpForNextLevel(user.xp)
   const totalCompleted = user.completedTasks.length
+  const streakMultiplier = getStreakMultiplier(user.currentStreak)
+
+  // Tous les achievements pour afficher ceux non débloqués aussi
+  const allAchievements = await prisma.achievement.findMany()
+  const unlockedIds = new Set(user.achievements.map((a) => a.achievementId))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,10 +81,55 @@ export default async function ProfilePage() {
               <p className="text-3xl font-bold text-yellow-600">{user.xp}</p>
               <p className="text-sm text-gray-500 mt-1">XP totaux</p>
             </div>
+            <div className="bg-amber-50 rounded-xl p-4 text-center">
+              <p className="text-3xl font-bold text-amber-600">{user.currency}</p>
+              <p className="text-sm text-gray-500 mt-1">🪙 Coins</p>
+            </div>
+            <div className="bg-orange-50 rounded-xl p-4 text-center">
+              <p className="text-3xl font-bold text-orange-600">{user.currentStreak}</p>
+              <p className="text-sm text-gray-500 mt-1">🔥 Streak (jours)</p>
+              {streakMultiplier > 1 && (
+                <p className="text-xs text-orange-500 mt-1 font-medium">Bonus x{streakMultiplier}</p>
+              )}
+            </div>
+          </div>
+          {user.longestStreak > 0 && (
+            <p className="text-xs text-gray-400 text-center mt-3">
+              Record : {user.longestStreak} jours de suite
+            </p>
+          )}
+        </div>
+
+        {/* Achievements */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <h3 className="font-semibold text-gray-900 mb-4">
+            Achievements ({user.achievements.length}/{allAchievements.length})
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            {allAchievements.map((achievement) => {
+              const unlocked = unlockedIds.has(achievement.id)
+              return (
+                <div
+                  key={achievement.id}
+                  className={`rounded-xl p-3 text-center border ${
+                    unlocked
+                      ? 'bg-white border-indigo-200'
+                      : 'bg-gray-50 border-gray-100 opacity-40'
+                  }`}
+                >
+                  <div className="text-2xl mb-1">{achievement.icon}</div>
+                  <p className="text-xs font-medium text-gray-900">{achievement.name}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{achievement.description}</p>
+                  {achievement.reward > 0 && unlocked && (
+                    <p className="text-xs text-amber-600 mt-1">+{achievement.reward} 🪙</p>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 
-        {/* Récompenses XP */}
+        {/* Récompenses par tâche */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5">
           <h3 className="font-semibold text-gray-900 mb-3">Récompenses par tâche</h3>
           <div className="space-y-2">
@@ -88,11 +139,11 @@ export default async function ProfilePage() {
             </div>
             <div className="flex justify-between items-center">
               <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">Moyen</span>
-              <span className="font-bold text-gray-700">+50 XP</span>
+              <span className="font-bold text-gray-700">+50 XP · +5 🪙</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Difficile</span>
-              <span className="font-bold text-gray-700">+100 XP</span>
+              <span className="font-bold text-gray-700">+100 XP · +15 🪙</span>
             </div>
           </div>
         </div>
