@@ -24,17 +24,28 @@ model User {
   scores          Score[]
   items           UserItem[]
   achievements    UserAchievement[]
+  createdEvents   CalendarEvent[] @relation("CreatedEvents")
+  createdBoardItems BoardItem[]  @relation("CreatedBoardItems")
+  notifications     Notification[]
 }
 
 model Colocation {
-  id          String    @id @default(cuid())
-  name        String
-  inviteCode  String    @unique @default(cuid())
-  createdAt   DateTime  @default(now())
+  id                  String    @id @default(cuid())
+  name                String
+  inviteCode          String    @unique @default(cuid())
+  maxQuestsPerDay     Int       @default(2)
+  questsSetupDone     Boolean   @default(false)
+  lastQuestGen        DateTime?
+  createdAt           DateTime  @default(now())
 
-  members     UserColoc[]
-  tasks       Task[]
-  scores      Score[]
+  members         UserColoc[]
+  tasks           Task[]
+  scores          Score[]
+  colocTemplates  ColocTemplate[]
+  affinities      MemberAffinity[]
+  events          CalendarEvent[]
+  boardItems      BoardItem[]
+  notifications   Notification[]
 }
 
 model UserColoc {
@@ -150,6 +161,60 @@ model UserAchievement {
   @@unique([userId, achievementId])
 }
 
+// === Notifications ===
+
+model Notification {
+  id        String    @id @default(cuid())
+  type      String    // "task_assigned", "task_completed", "new_event", "new_board_item"
+  message   String
+  read      Boolean   @default(false)
+  link      String?   // URL vers la page concernée
+  createdAt DateTime  @default(now())
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  colocId   String
+  coloc     Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+}
+
+// === Tableau d'affichage ===
+
+model BoardItem {
+  id          String    @id @default(cuid())
+  content     String
+  type        String    @default("text") // "text", "image", "link"
+  color       String    @default("yellow") // "yellow", "pink", "blue", "green", "purple"
+  imageUrl    String?
+  linkUrl     String?
+  createdAt   DateTime  @default(now())
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   User      @relation("CreatedBoardItems", fields: [createdById], references: [id])
+}
+
+// === Calendrier partagé ===
+
+model CalendarEvent {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  allDay      Boolean   @default(false)
+  color       String    @default("indigo") // indigo, red, green, amber, purple
+  createdAt   DateTime  @default(now())
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   User      @relation("CreatedEvents", fields: [createdById], references: [id])
+}
+
 // === Templates de quêtes ===
 
 model QuestTemplate {
@@ -160,4 +225,47 @@ model QuestTemplate {
   room          String?   // "salon", "cuisine", "sdb", "chambre", "exterieur"
   difficulty    String    @default("medium")
   recurrence    String    @default("weekly") // "daily", "weekly", "monthly"
+
+  colocTemplates ColocTemplate[]
+}
+
+// === Quêtes actives par coloc ===
+// Lie un template (ou une quête custom) à une colocation
+
+model ColocTemplate {
+  id          String    @id @default(cuid())
+  isActive    Boolean   @default(true)
+  isCustom    Boolean   @default(false)
+
+  // Si basé sur un template global
+  templateId  String?
+  template    QuestTemplate? @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  // Champs pour quêtes custom (ou override du template)
+  title       String?
+  description String?
+  category    String?
+  room        String?
+  difficulty  String?
+  recurrence  String?
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, colocId])
+}
+
+// === Affinités membres ===
+// Un membre peut avoir une préférence pour certaines catégories
+
+model MemberAffinity {
+  id        String @id @default(cuid())
+  weight    Int    @default(1) // plus le poids est élevé, plus souvent il reçoit cette catégorie
+
+  userId    String
+  colocId   String
+  coloc     Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+  category  String // "cleaning", "cooking", "sport", "maintenance", "admin"
+
+  @@unique([userId, colocId, category])
 }

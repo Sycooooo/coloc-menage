@@ -16,6 +16,7 @@ export default function TaskList({
 }) {
   const router = useRouter()
   const [completing, setCompleting] = useState<string | null>(null)
+  const [reserving, setReserving] = useState<string | null>(null)
   const [popup, setPopup] = useState<{
     taskId: string
     xp: number
@@ -49,6 +50,17 @@ export default function TaskList({
       router.refresh()
     }
     setCompleting(null)
+  }
+
+  async function toggleReserve(taskId: string) {
+    setReserving(taskId)
+    try {
+      await api.post(`/api/tasks/${taskId}/reserve`)
+      router.refresh()
+    } catch (err) {
+      console.error('Erreur réservation:', err)
+    }
+    setReserving(null)
   }
 
   const recurrenceLabel: Record<string, string> = {
@@ -142,6 +154,24 @@ export default function TaskList({
                     )}
                   </div>
                 </div>
+                {/* Bouton réserver / libérer */}
+                {!task.assignedTo ? (
+                  <button
+                    onClick={() => toggleReserve(task.id)}
+                    disabled={reserving === task.id}
+                    className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition disabled:opacity-50 flex-shrink-0"
+                  >
+                    {reserving === task.id ? '...' : 'Réserver'}
+                  </button>
+                ) : task.assignedTo.id === currentUserId ? (
+                  <button
+                    onClick={() => toggleReserve(task.id)}
+                    disabled={reserving === task.id}
+                    className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition disabled:opacity-50 flex-shrink-0"
+                  >
+                    {reserving === task.id ? '...' : 'Libérer'}
+                  </button>
+                ) : null}
               </div>
             ))}
           </div>

@@ -14,10 +14,10 @@ export default async function Home() {
       <div className="text-center max-w-md">
         <div className="text-6xl mb-6">🏠</div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Coloc Ménage
+          THC App
         </h1>
         <p className="text-gray-600 mb-8 text-lg">
-          Gérez les tâches de ménage avec vos colocataires, sans prise de tête.
+          Gérez les tâches ménagères avec vos colocataires, sans prise de tête.
         </p>
         <div className="flex gap-4 justify-center">
           <Link

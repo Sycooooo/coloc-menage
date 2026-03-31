@@ -34,9 +34,30 @@ export const api = {
     return handleResponse(res)
   },
 
+  // Pour modifier partiellement une ressource (changer un paramètre, etc.)
+  async patch(url: string, body: Record<string, unknown>) {
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    return handleResponse(res)
+  },
+
   // Pour récupérer des données (lister les tâches, etc.)
   async get(url: string) {
     const res = await fetch(url)
+    return handleResponse(res)
+  },
+
+  // Pour supprimer une ressource
+  async delete(url: string, body?: Record<string, unknown>) {
+    const options: RequestInit = { method: 'DELETE' }
+    if (body) {
+      options.headers = { 'Content-Type': 'application/json' }
+      options.body = JSON.stringify(body)
+    }
+    const res = await fetch(url, options)
     return handleResponse(res)
   },
 

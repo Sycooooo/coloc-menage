@@ -4,7 +4,8 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import TaskList from '@/components/TaskList'
 import AddTaskForm from '@/components/AddTaskForm'
-import GenerateQuests from '@/components/GenerateQuests'
+import NotificationBell from '@/components/NotificationBell'
+import { autoGenerateQuests } from '@/lib/quest-generator'
 
 export default async function ColocPage({
   params,
@@ -15,6 +16,9 @@ export default async function ColocPage({
   if (!session?.user?.id) redirect('/login')
 
   const { id } = await params
+
+  // Auto-génération des quêtes (avant de charger les tâches)
+  await autoGenerateQuests(id)
 
   const coloc = await prisma.colocation.findUnique({
     where: { id },
@@ -41,6 +45,10 @@ export default async function ColocPage({
 
   const isAdmin = coloc.members.find((m) => m.userId === userId)?.role === 'admin'
 
+  const hasActiveTemplates = await prisma.colocTemplate.count({
+    where: { colocId: id, isActive: true },
+  }) > 0
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
@@ -51,11 +59,29 @@ export default async function ColocPage({
           <span className="text-xl">🏠</span>
           <h1 className="text-xl font-bold text-gray-900">{coloc.name}</h1>
         </div>
-        {isAdmin && (
-          <div className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-medium">
-            Admin
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/coloc/${id}/calendar`}
+            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+          >
+            📅 Calendrier
+          </Link>
+          <Link
+            href={`/coloc/${id}/board`}
+            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+          >
+            📌 Tableau
+          </Link>
+          {isAdmin && (
+            <Link
+              href={`/coloc/${id}/admin`}
+              className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium hover:bg-indigo-200 transition"
+            >
+              ⚙️ Admin
+            </Link>
+          )}
+          <NotificationBell />
+        </div>
       </header>
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
@@ -88,8 +114,18 @@ export default async function ColocPage({
           </div>
         </div>
 
-        {/* Générer des quêtes (admin seulement) */}
-        {isAdmin && <GenerateQuests colocId={coloc.id} />}
+        {/* Bandeau setup si pas encore configuré */}
+        {isAdmin && !hasActiveTemplates && (
+          <Link
+            href={`/coloc/${id}/admin`}
+            className="block bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 hover:border-amber-300 transition"
+          >
+            <p className="font-semibold text-amber-900">Configure tes quêtes</p>
+            <p className="text-xs text-amber-600 mt-0.5">
+              Active les tâches de ta maison dans l&apos;admin pour que les quêtes se génèrent automatiquement chaque jour.
+            </p>
+          </Link>
+        )}
 
         {/* Ajouter une tâche */}
         <AddTaskForm

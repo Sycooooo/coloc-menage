@@ -22,7 +22,7 @@ export default async function DashboardPage() {
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-2xl">🏠</span>
-          <h1 className="text-xl font-bold text-gray-900">Coloc Ménage</h1>
+          <h1 className="text-xl font-bold text-gray-900">THC App</h1>
         </div>
         <div className="flex items-center gap-4">
           <Link href="/profile" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">

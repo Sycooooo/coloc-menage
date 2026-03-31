@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Coloc Ménage",
-  description: "Gérez les tâches de ménage en colocation",
+  title: "THC App",
+  description: "Gérez les tâches ménagères en colocation avec THC App",
 };
 
 export default function RootLayout({

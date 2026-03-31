@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { createTaskSchema } from '@/lib/validations'
+import { notify } from '@/lib/notifications'
 
 // Créer une tâche
 export async function POST(request: Request) {
@@ -36,6 +37,18 @@ export async function POST(request: Request) {
     },
     include: { assignedTo: { select: { id: true, username: true, avatar: true } } },
   })
+
+  // Notifier la personne assignée (si différente du créateur)
+  if (assignedToId && assignedToId !== session.user.id) {
+    const creator = await prisma.user.findUnique({ where: { id: session.user.id }, select: { username: true } })
+    await notify(
+      assignedToId,
+      colocId,
+      'task_assigned',
+      `${creator?.username} t'a assigné "${title}"`,
+      `/coloc/${colocId}`
+    )
+  }
 
   return NextResponse.json(task, { status: 201 })
 }

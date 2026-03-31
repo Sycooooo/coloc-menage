@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { XP_REWARDS, COIN_REWARDS, getStreakMultiplier, getLevel } from '@/lib/xp'
+import { notifyColoc } from '@/lib/notifications'
 
 export async function POST(
   _request: Request,
@@ -92,6 +93,15 @@ export async function POST(
     console.error('Erreur mise à jour:', err)
     return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
   }
+
+  // === Notification aux colocataires ===
+  await notifyColoc(
+    task.colocId,
+    session.user.id,
+    'task_completed',
+    `${user.username} a terminé "${task.title}" !`,
+    `/coloc/${task.colocId}`
+  )
 
   // === Vérification des achievements ===
   let newAchievements: { name: string; icon: string; reward: number }[] = []
