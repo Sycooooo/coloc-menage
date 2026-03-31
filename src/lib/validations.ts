@@ -45,3 +45,15 @@ export const createTaskSchema = z.object({
   dueDate: z.string().optional().nullable(),
   recurrence: z.enum(['daily', 'weekly', 'monthly']).optional().nullable(),
 })
+
+// --- Créer une dépense ---
+export const createExpenseSchema = z.object({
+  amount: z.number({ error: 'Montant requis' }).positive('Le montant doit être positif'),
+  description: z
+    .string({ error: 'Description requise' })
+    .min(1, 'Description requise')
+    .max(200, 'Description trop longue'),
+  category: z.enum(['courses', 'loyer', 'sorties', 'menage', 'other']).default('other'),
+  colocId: z.string({ error: 'Colocation requise' }).min(1, 'Colocation requise'),
+  splitBetween: z.array(z.string()).min(1, 'Au moins un participant'),
+})

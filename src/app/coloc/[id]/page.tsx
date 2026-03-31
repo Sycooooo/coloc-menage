@@ -50,44 +50,50 @@ export default async function ColocPage({
   }) > 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-stone-50">
+      <header className="bg-stone-100 border-b border-stone-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="text-gray-500 hover:text-gray-700">
+          <Link href="/dashboard" className="text-stone-500 hover:text-stone-600">
             ←
           </Link>
           <span className="text-xl">🏠</span>
-          <h1 className="text-xl font-bold text-gray-900">{coloc.name}</h1>
+          <h1 className="text-xl font-bold text-stone-800">{coloc.name}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href={`/coloc/${id}/calendar`}
-            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+            className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium hover:bg-stone-200 transition"
           >
             📅 Calendrier
           </Link>
           <Link
             href={`/coloc/${id}/board`}
-            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+            className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium hover:bg-stone-200 transition"
           >
             📌 Tableau
           </Link>
           <Link
             href={`/coloc/${id}/chat`}
-            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+            className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium hover:bg-stone-200 transition"
           >
             💬 Chat
           </Link>
           <Link
             href={`/coloc/${id}/menu`}
-            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+            className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium hover:bg-stone-200 transition"
           >
             🍽️ Menu
+          </Link>
+          <Link
+            href={`/coloc/${id}/expenses`}
+            className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium hover:bg-stone-200 transition"
+          >
+            💰 Dépenses
           </Link>
           {isAdmin && (
             <Link
               href={`/coloc/${id}/admin`}
-              className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full font-medium hover:bg-indigo-200 transition"
+              className="text-xs bg-amber-100 text-amber-800 px-3 py-1.5 rounded-full font-medium hover:bg-amber-200 transition"
             >
               ⚙️ Admin
             </Link>
@@ -98,26 +104,26 @@ export default async function ColocPage({
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
         {/* Code d'invitation */}
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex items-center justify-between">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-indigo-700">Code d&apos;invitation</p>
-            <p className="font-mono text-indigo-900 text-sm mt-0.5">{coloc.inviteCode}</p>
+            <p className="text-sm font-medium text-amber-800">Code d&apos;invitation</p>
+            <p className="font-mono text-amber-900 text-sm mt-0.5">{coloc.inviteCode}</p>
           </div>
-          <p className="text-xs text-indigo-500">Partage ce code pour inviter des colocataires</p>
+          <p className="text-xs text-amber-600">Partage ce code pour inviter des colocataires</p>
         </div>
 
         {/* Membres */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-3">Colocataires</h2>
+        <div className="bg-white rounded-2xl border border-stone-200 p-5">
+          <h2 className="font-semibold text-stone-800 mb-3">Colocataires</h2>
           <div className="flex flex-wrap gap-3">
             {coloc.members.map((m) => (
               <div key={m.id} className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-medium text-indigo-700">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-sm font-medium text-amber-800">
                   {m.user.username[0].toUpperCase()}
                 </div>
-                <span className="text-sm text-gray-700">{m.user.username}</span>
+                <span className="text-sm text-stone-600">{m.user.username}</span>
                 {coloc.scores.find(s => s.userId === m.userId) && (
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-stone-400">
                     {coloc.scores.find(s => s.userId === m.userId)?.points} pts
                   </span>
                 )}

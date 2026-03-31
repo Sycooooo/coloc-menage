@@ -28,6 +28,8 @@ model User {
   createdBoardItems BoardItem[]  @relation("CreatedBoardItems")
   notifications     Notification[]
   messages          Message[]
+  paidExpenses      Expense[]      @relation("PaidExpenses")
+  expenseSplits     ExpenseSplit[] @relation("ExpenseSplits")
 }
 
 model Colocation {
@@ -49,6 +51,7 @@ model Colocation {
   notifications   Notification[]
   messages        Message[]
   menus           WeeklyMenu[]
+  expenses        Expense[]
 }
 
 model UserColoc {
@@ -287,6 +290,33 @@ model WeeklyMenu {
 
   colocId       String
   coloc         Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+}
+
+// === Dépenses (Tricount) ===
+
+model Expense {
+  id          String   @id @default(cuid())
+  amount      Float
+  description String
+  category    String   @default("other") // "courses", "loyer", "sorties", "menage", "other"
+  paidById    String
+  paidBy      User     @relation("PaidExpenses", fields: [paidById], references: [id], onDelete: Cascade)
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  splits      ExpenseSplit[]
+}
+
+model ExpenseSplit {
+  id          String   @id @default(cuid())
+  amount      Float    // Montant dû par cette personne
+  userId      String
+  user        User     @relation("ExpenseSplits", fields: [userId], references: [id], onDelete: Cascade)
+  expenseId   String
+  expense     Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, expenseId])
 }
 
 // === Chat ===
