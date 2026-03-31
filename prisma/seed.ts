@@ -34,14 +34,118 @@ const achievements = [
   { name: 'Riche', description: 'Accumule 500 coins', icon: '💰', condition: 'coins:500', reward: 0 },
 ]
 
+// === Items avatar gratuits (de base pour tous les users) ===
+const freeAvatarItems = [
+  // Cheveux
+  { name: 'Court noir', layer: 'hair', spriteName: 'short-black', rarity: 'common' },
+  { name: 'Court brun', layer: 'hair', spriteName: 'short-brown', rarity: 'common' },
+  { name: 'Mi-long brun', layer: 'hair', spriteName: 'medium-brown', rarity: 'common' },
+  { name: 'Long noir', layer: 'hair', spriteName: 'long-black', rarity: 'common' },
+
+  // Yeux
+  { name: 'Classique', layer: 'eyes', spriteName: 'default', rarity: 'common' },
+  { name: 'Endormi', layer: 'eyes', spriteName: 'sleepy', rarity: 'common' },
+
+  // Hauts
+  { name: 'T-shirt blanc', layer: 'top', spriteName: 'tshirt-white', rarity: 'common' },
+  { name: 'T-shirt noir', layer: 'top', spriteName: 'tshirt-black', rarity: 'common' },
+  { name: 'Hoodie gris', layer: 'top', spriteName: 'hoodie-grey', rarity: 'common' },
+
+  // Bas
+  { name: 'Cargo noir', layer: 'bottom', spriteName: 'cargo-black', rarity: 'common' },
+  { name: 'Jean bleu', layer: 'bottom', spriteName: 'jean-blue', rarity: 'common' },
+  { name: 'Jean noir', layer: 'bottom', spriteName: 'jean-black', rarity: 'common' },
+
+  // Chaussures
+  { name: 'Sneakers blanches', layer: 'shoes', spriteName: 'sneakers-white', rarity: 'common' },
+  { name: 'Converse noires', layer: 'shoes', spriteName: 'converse-black', rarity: 'common' },
+]
+
+// === Items payants (boutique) ===
+const paidAvatarItems = [
+  // Cheveux premium
+  { name: 'Buzz blond', layer: 'hair', spriteName: 'buzz-blonde', rarity: 'rare', price: 20 },
+  { name: 'Afro noir', layer: 'hair', spriteName: 'afro-black', rarity: 'rare', price: 25 },
+
+  // Yeux premium
+  { name: 'Ronds', layer: 'eyes', spriteName: 'round', rarity: 'rare', price: 15 },
+
+  // Hauts premium
+  { name: 'Oversized beige', layer: 'top', spriteName: 'oversized-beige', rarity: 'rare', price: 30 },
+  { name: 'Bomber navy', layer: 'top', spriteName: 'bomber-navy', rarity: 'epic', price: 50 },
+
+  // Bas premium
+  { name: 'Cargo camo', layer: 'bottom', spriteName: 'cargo-camo', rarity: 'rare', price: 25 },
+
+  // Chaussures premium
+  { name: 'Timberland tan', layer: 'shoes', spriteName: 'timbs-tan', rarity: 'rare', price: 35 },
+
+  // Accessoires (tous payants)
+  { name: 'Casquette noire', layer: 'accessory', spriteName: 'cap-black', rarity: 'common', price: 15 },
+  { name: 'Casquette camo', layer: 'accessory', spriteName: 'cap-camo', rarity: 'rare', price: 25 },
+  { name: 'Lunettes rondes', layer: 'accessory', spriteName: 'glasses-round', rarity: 'rare', price: 20 },
+  { name: 'Casque audio', layer: 'accessory', spriteName: 'headphones-black', rarity: 'epic', price: 45 },
+  { name: 'Cagoule noire', layer: 'accessory', spriteName: 'balaclava-black', rarity: 'legendary', price: 80 },
+]
+
 async function main() {
   console.log('Seeding achievements...')
 
   for (const a of achievements) {
-    await prisma.achievement.create({ data: a })
+    await prisma.achievement.upsert({
+      where: { id: a.name }, // fallback: on utilise create si pas d'id
+      update: {},
+      create: a,
+    }).catch(() => prisma.achievement.create({ data: a }))
   }
 
   console.log(`${achievements.length} achievements créés !`)
+
+  // Seed des items avatar gratuits
+  console.log('Seeding avatar items...')
+
+  for (const item of freeAvatarItems) {
+    const existing = await prisma.shopItem.findFirst({
+      where: { spriteName: item.spriteName, layer: item.layer },
+    })
+    if (!existing) {
+      await prisma.shopItem.create({
+        data: {
+          name: item.name,
+          type: 'avatar_part',
+          layer: item.layer,
+          spriteName: item.spriteName,
+          rarity: item.rarity,
+          price: 0,
+          isFree: true,
+        },
+      })
+    }
+  }
+
+  console.log(`${freeAvatarItems.length} items gratuits vérifiés/créés`)
+
+  // Seed des items payants
+  for (const item of paidAvatarItems) {
+    const existing = await prisma.shopItem.findFirst({
+      where: { spriteName: item.spriteName, layer: item.layer },
+    })
+    if (!existing) {
+      await prisma.shopItem.create({
+        data: {
+          name: item.name,
+          type: 'avatar_part',
+          layer: item.layer,
+          spriteName: item.spriteName,
+          rarity: item.rarity,
+          price: item.price,
+          isFree: false,
+        },
+      })
+    }
+  }
+
+  console.log(`${paidAvatarItems.length} items payants vérifiés/créés`)
 }
 
 main()

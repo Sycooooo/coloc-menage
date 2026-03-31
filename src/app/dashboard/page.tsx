@@ -19,11 +19,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-bg">
-      {/* Header */}
-      <header className="bg-surface border-b border-b px-6 py-4 flex items-center justify-between">
+      {/* Header glass */}
+      <header className="glass-header sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-2xl">🏠</span>
-          <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase">THC App</h1>
+          <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">THC App</h1>
         </div>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -45,17 +45,17 @@ export default async function DashboardPage() {
 
       <main className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-3xl tracking-wide text-t-primary uppercase">Mes colocations</h2>
+          <h2 className="font-display text-3xl tracking-wide text-t-primary uppercase neon-title">Mes colocations</h2>
           <Link
             href="/coloc/new"
-            className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition"
+            className="btn-glow px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition"
           >
             + Nouvelle coloc
           </Link>
         </div>
 
         {colocs.length === 0 ? (
-          <div className="text-center py-16 bg-surface rounded-2xl border border-b" style={{ boxShadow: 'var(--shadow)' }}>
+          <div className="card card-glow text-center py-16 px-6">
             <div className="text-5xl mb-4">🏡</div>
             <h3 className="text-lg font-semibold text-t-muted mb-2">
               Aucune colocation
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
             <div className="flex gap-3 justify-center">
               <Link
                 href="/coloc/new"
-                className="px-5 py-2.5 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition"
+                className="btn-glow px-5 py-2.5 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition"
               >
                 Créer une coloc
               </Link>
@@ -84,17 +84,16 @@ export default async function DashboardPage() {
               <Link
                 key={coloc.id}
                 href={`/coloc/${coloc.id}`}
-                className="bg-surface rounded-2xl border border-b p-6 hover:border-accent transition"
-                style={{ boxShadow: 'var(--shadow)' }}
+                className="card card-glow p-6 hover:border-accent/50 transition group"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-t-primary mb-1">
+                    <h3 className="text-lg font-semibold text-t-primary mb-1 group-hover:text-accent transition">
                       {coloc.name}
                     </h3>
                     <p className="text-sm text-t-muted">
                       {coloc.members.length} colocataire{coloc.members.length > 1 ? 's' : ''} ·{' '}
-                      {coloc.tasks.length} tâche{coloc.tasks.length > 1 ? 's' : ''} en attente
+                      <span className="stat-number">{coloc.tasks.length}</span> tâche{coloc.tasks.length > 1 ? 's' : ''} en attente
                     </p>
                   </div>
                   <div className="flex -space-x-2">
@@ -113,7 +112,8 @@ export default async function DashboardPage() {
 
             <Link
               href="/coloc/join"
-              className="bg-surface rounded-2xl border border-dashed border-b-hover p-6 text-center text-t-muted hover:border-accent hover:text-accent transition"
+              className="card p-6 text-center text-t-muted border-dashed hover:border-accent/50 hover:text-accent transition"
+              style={{ borderStyle: 'dashed' }}
             >
               + Rejoindre une colocation avec un code
             </Link>

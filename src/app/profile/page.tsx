@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { getLevel, getXpForNextLevel, getStreakMultiplier } from '@/lib/xp'
 import Link from 'next/link'
 import AvatarUpload from '@/components/AvatarUpload'
+import PixelAvatar from '@/components/PixelAvatar'
 
 export default async function ProfilePage() {
   const session = await auth()
@@ -14,6 +15,7 @@ export default async function ProfilePage() {
     include: {
       completedTasks: { include: { task: true } },
       achievements: { include: { achievement: true } },
+      avatarConfig: true,
     },
   })
 
@@ -39,11 +41,36 @@ export default async function ProfilePage() {
 
         {/* Carte profil */}
         <div className="bg-surface rounded-2xl border border-b p-6 flex flex-col items-center gap-4" style={{ boxShadow: 'var(--shadow-lg)' }}>
-          <AvatarUpload
-            currentAvatar={user.avatar}
-            username={user.username}
-          />
+          {user.avatarConfig ? (
+            <PixelAvatar
+              config={{
+                skinTone: user.avatarConfig.skinTone,
+                body: user.avatarConfig.body,
+                hair: user.avatarConfig.hair,
+                eyes: user.avatarConfig.eyes,
+                top: user.avatarConfig.top,
+                bottom: user.avatarConfig.bottom,
+                shoes: user.avatarConfig.shoes,
+                accessory: user.avatarConfig.accessory,
+              }}
+              username={user.username}
+              size="lg"
+            />
+          ) : (
+            <AvatarUpload
+              currentAvatar={user.avatar}
+              username={user.username}
+            />
+          )}
           <h2 className="font-display text-3xl tracking-wide text-t-primary uppercase">{user.username}</h2>
+
+          {/* Bouton personnaliser */}
+          <Link
+            href="/profile/character"
+            className="px-4 py-2 bg-accent-secondary hover:bg-accent-secondary-hover text-white rounded-full text-sm font-bold transition"
+          >
+            Personnaliser mon avatar
+          </Link>
 
           {/* Badge niveau */}
           <div className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-full text-lg font-bold">

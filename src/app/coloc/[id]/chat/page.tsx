@@ -46,7 +46,10 @@ export default async function ChatPage({
       <Chat
         colocId={id}
         currentUserId={session.user.id}
-        initialMessages={messages.reverse()}
+        initialMessages={messages.reverse().map((m) => ({
+          ...m,
+          createdAt: m.createdAt.toISOString(),
+        }))}
       />
     </div>
   )

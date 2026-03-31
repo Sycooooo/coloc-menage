@@ -30,6 +30,7 @@ model User {
   messages          Message[]
   paidExpenses      Expense[]      @relation("PaidExpenses")
   expenseSplits     ExpenseSplit[] @relation("ExpenseSplits")
+  avatarConfig      AvatarConfig?
 }
 
 model Colocation {
@@ -120,9 +121,12 @@ model ShopItem {
   name        String
   description String?
   price       Int
-  type        String    // "avatar", "decoration", "badge_style"
+  type        String    // "avatar_part", "decoration", "badge_style"
   rarity      String    @default("common") // "common", "rare", "epic", "legendary"
   imageUrl    String?
+  layer       String?   // "hair", "eyes", "top", "bottom", "shoes", "accessory"
+  spriteName  String?   // nom du fichier sprite (ex: "hoodie-black")
+  isFree      Boolean   @default(false)
   createdAt   DateTime  @default(now())
 
   buyers      UserItem[]
@@ -139,6 +143,23 @@ model UserItem {
   item        ShopItem  @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@unique([userId, itemId])
+}
+
+// === Avatar Pixel Art ===
+
+model AvatarConfig {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  skinTone  String  @default("medium")  // "light", "medium", "tan", "dark", "deep"
+  body      String  @default("default")
+  hair      String?                      // spriteName ou null
+  eyes      String  @default("default")
+  top       String?
+  bottom    String?
+  shoes     String?
+  accessory String?
 }
 
 // === Achievements ===

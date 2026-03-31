@@ -52,21 +52,15 @@ export default async function ColocPage({
 
   return (
     <div className="min-h-screen bg-bg">
-      <header className="bg-surface border-b border-b px-6 py-4 flex items-center justify-between">
+      <header className="glass-header sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="text-t-muted hover:text-t-primary transition">
             ←
           </Link>
           <span className="text-xl">🏠</span>
-          <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase">{coloc.name}</h1>
+          <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href={`/coloc/${id}/maison`}
-            className="text-xs bg-accent-secondary/15 text-accent-secondary px-3 py-1.5 rounded-full font-medium hover:bg-accent-secondary/25 transition"
-          >
-            🏠 Maison
-          </Link>
           <Link
             href={`/coloc/${id}/calendar`}
             className="text-xs bg-surface-hover text-t-muted px-3 py-1.5 rounded-full font-medium hover:text-t-primary transition"
@@ -115,13 +109,13 @@ export default async function ColocPage({
         <div className="bg-accent-secondary/10 border border-accent-secondary/20 rounded-xl p-4 flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-accent-secondary">Code d&apos;invitation</p>
-            <p className="font-mono text-t-primary text-sm mt-0.5">{coloc.inviteCode}</p>
+            <p className="code-text text-t-primary text-sm mt-0.5">{coloc.inviteCode}</p>
           </div>
           <p className="text-xs text-t-muted">Partage ce code pour inviter des colocataires</p>
         </div>
 
         {/* Membres */}
-        <div className="bg-surface rounded-2xl border border-b p-5" style={{ boxShadow: 'var(--shadow)' }}>
+        <div className="card card-glow p-5">
           <h2 className="font-semibold text-t-primary mb-3">Colocataires</h2>
           <div className="flex flex-wrap gap-3">
             {coloc.members.map((m) => (
@@ -131,7 +125,7 @@ export default async function ColocPage({
                 </div>
                 <span className="text-sm text-t-muted">{m.user.username}</span>
                 {coloc.scores.find(s => s.userId === m.userId) && (
-                  <span className="text-xs text-t-faint">
+                  <span className="text-xs text-t-faint stat-number">
                     {coloc.scores.find(s => s.userId === m.userId)?.points} pts
                   </span>
                 )}

@@ -34,6 +34,16 @@ export const api = {
     return handleResponse(res)
   },
 
+  // Pour remplacer entièrement une ressource (sauvegarder une config, etc.)
+  async put(url: string, body: Record<string, unknown>) {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    return handleResponse(res)
+  },
+
   // Pour modifier partiellement une ressource (changer un paramètre, etc.)
   async patch(url: string, body: Record<string, unknown>) {
     const res = await fetch(url, {
