@@ -27,6 +27,7 @@ model User {
   createdEvents   CalendarEvent[] @relation("CreatedEvents")
   createdBoardItems BoardItem[]  @relation("CreatedBoardItems")
   notifications     Notification[]
+  messages          Message[]
 }
 
 model Colocation {
@@ -46,6 +47,7 @@ model Colocation {
   events          CalendarEvent[]
   boardItems      BoardItem[]
   notifications   Notification[]
+  messages        Message[]
 }
 
 model UserColoc {
@@ -268,4 +270,20 @@ model MemberAffinity {
   category  String // "cleaning", "cooking", "sport", "maintenance", "admin"
 
   @@unique([userId, colocId, category])
+}
+
+// === Chat ===
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  type      String   @default("text") // "text", "gif"
+  imageUrl  String?  // URL du GIF
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  colocId   String
+  coloc     Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
 }

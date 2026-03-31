@@ -72,6 +72,12 @@ export default async function ColocPage({
           >
             📌 Tableau
           </Link>
+          <Link
+            href={`/coloc/${id}/chat`}
+            className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition"
+          >
+            💬 Chat
+          </Link>
           {isAdmin && (
             <Link
               href={`/coloc/${id}/admin`}
