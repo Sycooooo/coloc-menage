@@ -75,7 +75,7 @@ export async function POST(
     return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 })
   }
 
-  const { amount, description, category, splitBetween } = result.data
+  const { amount, description, category, splitBetween, splitMethod, customSplits } = result.data
 
   const membership = await prisma.userColoc.findUnique({
     where: { userId_colocId: { userId: session.user.id, colocId } },
@@ -84,8 +84,39 @@ export async function POST(
     return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
   }
 
-  // Répartition équitable
-  const splitAmount = Math.round((amount / splitBetween.length) * 100) / 100
+  // Calcul des montants par personne selon la méthode
+  let splitAmounts: Record<string, number> = {}
+
+  if (splitMethod === 'equal') {
+    const perPerson = Math.round((amount / splitBetween.length) * 100) / 100
+    for (const userId of splitBetween) {
+      splitAmounts[userId] = perPerson
+    }
+  } else if (splitMethod === 'exact' && customSplits) {
+    const total = Object.values(customSplits).reduce((s, v) => s + v, 0)
+    if (Math.abs(total - amount) > 0.02) {
+      return NextResponse.json({ error: `Le total des montants (${total.toFixed(2)}€) ne correspond pas au montant total (${amount.toFixed(2)}€)` }, { status: 400 })
+    }
+    splitAmounts = customSplits
+  } else if (splitMethod === 'percentage' && customSplits) {
+    const totalPercent = Object.values(customSplits).reduce((s, v) => s + v, 0)
+    if (Math.abs(totalPercent - 100) > 0.1) {
+      return NextResponse.json({ error: `Le total des pourcentages doit être 100% (actuellement ${totalPercent.toFixed(1)}%)` }, { status: 400 })
+    }
+    for (const [userId, percent] of Object.entries(customSplits)) {
+      splitAmounts[userId] = Math.round((amount * percent / 100) * 100) / 100
+    }
+  } else if (splitMethod === 'shares' && customSplits) {
+    const totalShares = Object.values(customSplits).reduce((s, v) => s + v, 0)
+    if (totalShares === 0) {
+      return NextResponse.json({ error: 'Le total des parts ne peut pas être 0' }, { status: 400 })
+    }
+    for (const [userId, shares] of Object.entries(customSplits)) {
+      splitAmounts[userId] = Math.round((amount * shares / totalShares) * 100) / 100
+    }
+  } else {
+    return NextResponse.json({ error: 'Méthode de partage invalide' }, { status: 400 })
+  }
 
   const expense = await prisma.expense.create({
     data: {
@@ -95,7 +126,7 @@ export async function POST(
       paidById: session.user.id,
       colocId,
       splits: {
-        create: splitBetween.map((userId: string) => ({
+        create: Object.entries(splitAmounts).map(([userId, splitAmount]) => ({
           userId,
           amount: splitAmount,
         })),

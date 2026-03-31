@@ -56,4 +56,7 @@ export const createExpenseSchema = z.object({
   category: z.enum(['courses', 'loyer', 'sorties', 'menage', 'other']).default('other'),
   colocId: z.string({ error: 'Colocation requise' }).min(1, 'Colocation requise'),
   splitBetween: z.array(z.string()).min(1, 'Au moins un participant'),
+  splitMethod: z.enum(['equal', 'exact', 'percentage', 'shares']).default('equal'),
+  // Pour exact: { userId: montant }, pour percentage: { userId: % }, pour shares: { userId: nbParts }
+  customSplits: z.record(z.string(), z.number()).optional(),
 })
