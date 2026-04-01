@@ -31,21 +31,10 @@ export default async function CharacterPage() {
     .filter((item) => item.type === 'avatar_part')
 
   // Combiner gratuits + possédés (sans doublons)
-  const ownedIds = new Set(ownedItems.map((i) => i.id))
   const allAvailableItems = [
     ...freeItems,
     ...ownedItems.filter((i) => !freeItems.some((f) => f.id === i.id)),
   ]
-
-  // Items payants non possédés (pour montrer les cadenas)
-  const lockedItems = await prisma.shopItem.findMany({
-    where: {
-      type: 'avatar_part',
-      isFree: false,
-      id: { notIn: [...ownedIds] },
-    },
-    orderBy: { price: 'asc' },
-  })
 
   return (
     <div className="min-h-screen bg-bg">
@@ -76,14 +65,6 @@ export default async function CharacterPage() {
           spriteName: i.spriteName!,
           rarity: i.rarity,
           isFree: i.isFree,
-        }))}
-        lockedItems={lockedItems.map((i) => ({
-          id: i.id,
-          name: i.name,
-          layer: i.layer!,
-          spriteName: i.spriteName!,
-          rarity: i.rarity,
-          price: i.price,
         }))}
       />
     </div>

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { api } from '@/lib/api'
 import PixelAvatar, { type AvatarConfigData } from './PixelAvatar'
 import { RARITY_LABELS, RARITY_COLORS } from '@/lib/xp'
@@ -16,19 +15,9 @@ type AvailableItem = {
   isFree: boolean
 }
 
-type LockedItem = {
-  id: string
-  name: string
-  layer: string
-  spriteName: string
-  rarity: string
-  price: number
-}
-
 type Props = {
   initialConfig: AvatarConfigData | null
   availableItems: AvailableItem[]
-  lockedItems: LockedItem[]
 }
 
 const SKIN_TONES = [
@@ -60,7 +49,7 @@ const DEFAULT_CONFIG: AvatarConfigData = {
   accessory: null,
 }
 
-export default function CharacterCreator({ initialConfig, availableItems, lockedItems }: Props) {
+export default function CharacterCreator({ initialConfig, availableItems }: Props) {
   const router = useRouter()
   const [config, setConfig] = useState<AvatarConfigData>(initialConfig || DEFAULT_CONFIG)
   const [activeTab, setActiveTab] = useState('skinTone')
@@ -86,8 +75,6 @@ export default function CharacterCreator({ initialConfig, availableItems, locked
 
   // Items filtrés par couche active
   const layerItems = availableItems.filter((i) => i.layer === activeTab)
-  const layerLocked = lockedItems.filter((i) => i.layer === activeTab)
-
   // Valeur actuelle sélectionnée pour l'onglet actif
   const currentValue = activeTab === 'skinTone'
     ? config.skinTone
@@ -202,31 +189,9 @@ export default function CharacterCreator({ initialConfig, availableItems, locked
                 </button>
               ))}
 
-              {/* Items verrouillés (lien vers la boutique) */}
-              {layerLocked.map((item) => (
-                <Link
-                  href="/shop"
-                  key={item.id}
-                  className="rounded-xl border border-b p-3 flex flex-col items-center gap-2 opacity-50 relative hover:opacity-70 transition"
-                >
-                  <div className="absolute top-1 right-1 text-sm">🔒</div>
-                  <div className="w-16 h-16 bg-bg-secondary rounded-lg flex items-center justify-center overflow-hidden grayscale">
-                    <img
-                      src={`/sprites/${item.layer}/${item.layer === 'accessory' ? 'acc' : item.layer}-${item.spriteName}.png`}
-                      alt={item.name}
-                      className="w-full h-full"
-                      style={{ imageRendering: 'pixelated' }}
-                    />
-                  </div>
-                  <span className="text-xs text-t-muted font-medium text-center leading-tight">
-                    {item.name}
-                  </span>
-                  <span className="text-[10px] text-accent font-bold">{item.price} 🪙</span>
-                </Link>
-              ))}
             </div>
 
-            {layerItems.length === 0 && layerLocked.length === 0 && (
+            {layerItems.length === 0 && (
               <p className="text-center text-t-faint text-sm py-6">
                 Aucun item disponible pour cette couche
               </p>
