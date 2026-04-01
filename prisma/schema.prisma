@@ -31,6 +31,7 @@ model User {
   paidExpenses      Expense[]      @relation("PaidExpenses")
   expenseSplits     ExpenseSplit[] @relation("ExpenseSplits")
   avatarConfig      AvatarConfig?
+  placedFurniture   PlacedFurniture[] @relation("PlacedFurniture")
 }
 
 model Colocation {
@@ -53,6 +54,7 @@ model Colocation {
   messages        Message[]
   menus           WeeklyMenu[]
   expenses        Expense[]
+  placedFurniture PlacedFurniture[]
 }
 
 model UserColoc {
@@ -129,7 +131,17 @@ model ShopItem {
   isFree      Boolean   @default(false)
   createdAt   DateTime  @default(now())
 
+  // Furniture-specific fields (for type "decoration")
+  furnitureCategory String?  // "bed", "sofa", "table", "chair", "plant", "lamp", "rug", "appliance"
+  roomConstraint    String?  // limit to specific room ID, null = any room
+  widthCm           Int?     // width in cm (for 3D sizing)
+  depthCm           Int?     // depth in cm
+  heightCm          Int?     // height in cm
+  colorHex          String?  // default color hex
+  modelKey          String?  // 3D shape key (e.g. "bed-single", "sofa-l")
+
   buyers      UserItem[]
+  placements  PlacedFurniture[]
 }
 
 model UserItem {
@@ -211,10 +223,13 @@ model BoardItem {
   id          String    @id @default(cuid())
   content     String
   type        String    @default("text") // "text", "image", "link"
-  color       String    @default("yellow") // "yellow", "pink", "blue", "green", "purple"
+  color       String    @default("yellow") // "yellow", "pink", "blue", "green", "purple", "orange", "teal", "red"
+  size        String    @default("normal") // "normal", "large"
   imageUrl    String?
   linkUrl     String?
+  position    Int       @default(0)
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   colocId     String
   coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
@@ -354,4 +369,28 @@ model Message {
 
   colocId   String
   coloc     Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+}
+
+// === Meubles places (Maison 3D) ===
+
+model PlacedFurniture {
+  id          String   @id @default(cuid())
+  posX        Float    // X position in room (meters from room origin)
+  posZ        Float    // Z position in room (meters from room origin)
+  rotation    Float    @default(0) // Y-axis rotation in degrees (0, 90, 180, 270)
+
+  roomId      String   // "sejour", "cuisine", "sdb", etc.
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  placedById  String
+  placedBy    User     @relation("PlacedFurniture", fields: [placedById], references: [id], onDelete: Cascade)
+
+  itemId      String
+  item        ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+
+  @@index([colocId])
 }

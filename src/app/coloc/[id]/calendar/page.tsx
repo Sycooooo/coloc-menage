@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import Calendar from '@/components/Calendar'
+import PageTransition from '@/components/PageTransition'
 
 export default async function CalendarPage({
   params,
@@ -36,7 +37,9 @@ export default async function CalendarPage({
       </header>
 
       <main className="max-w-4xl mx-auto p-6">
-        <Calendar colocId={id} />
+        <PageTransition>
+          <Calendar colocId={id} />
+        </PageTransition>
       </main>
     </div>
   )

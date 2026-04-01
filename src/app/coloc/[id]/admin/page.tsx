@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import QuestSetup from '@/components/QuestSetup'
 import AffinitySetup from '@/components/AffinitySetup'
+import PageTransition from '@/components/PageTransition'
 
 export default async function AdminPage({
   params,
@@ -44,14 +45,16 @@ export default async function AdminPage({
       </header>
 
       <main className="max-w-4xl mx-auto p-6 space-y-8">
-        {/* Section 1 : Configuration des quêtes */}
-        <QuestSetup colocId={id} />
+        <PageTransition>
+          {/* Section 1 : Configuration des quêtes */}
+          <QuestSetup colocId={id} />
 
-        {/* Section 2 : Affinités des membres */}
-        <AffinitySetup
-          colocId={id}
-          members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.username }))}
-        />
+          {/* Section 2 : Affinités des membres */}
+          <AffinitySetup
+            colocId={id}
+            members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.username }))}
+          />
+        </PageTransition>
       </main>
     </div>
   )

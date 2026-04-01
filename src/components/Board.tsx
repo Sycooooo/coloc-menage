@@ -1,34 +1,53 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  rectSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { AnimatePresence } from 'framer-motion'
 import { api } from '@/lib/api'
+import BoardNote, { NOTE_COLORS } from './BoardNote'
 
 type BoardItem = {
   id: string
   content: string
   type: string
   color: string
+  size: string
   linkUrl: string | null
+  position: number
   createdAt: string
   createdBy: { id: string; username: string }
-}
-
-const NOTE_COLORS: Record<string, { bg: string; border: string; text: string }> = {
-  yellow: { bg: 'bg-yellow-500/15 dark:bg-yellow-500/20', border: 'border-yellow-500/30', text: 'text-yellow-900 dark:text-yellow-200' },
-  pink: { bg: 'bg-pink-500/15 dark:bg-pink-500/20', border: 'border-pink-500/30', text: 'text-pink-900 dark:text-pink-200' },
-  blue: { bg: 'bg-blue-500/15 dark:bg-blue-500/20', border: 'border-blue-500/30', text: 'text-blue-900 dark:text-blue-200' },
-  green: { bg: 'bg-green-500/15 dark:bg-green-500/20', border: 'border-green-500/30', text: 'text-green-900 dark:text-green-200' },
-  purple: { bg: 'bg-purple-500/15 dark:bg-purple-500/20', border: 'border-purple-500/30', text: 'text-purple-900 dark:text-purple-200' },
 }
 
 export default function Board({ colocId, currentUserId }: { colocId: string; currentUserId: string }) {
   const [items, setItems] = useState<BoardItem[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [activeId, setActiveId] = useState<string | null>(null)
 
+  // Form state
   const [content, setContent] = useState('')
   const [color, setColor] = useState('yellow')
+  const [size, setSize] = useState<'normal' | 'large'>('normal')
   const [linkUrl, setLinkUrl] = useState('')
+
+  // DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  )
 
   useEffect(() => {
     loadItems()
@@ -50,11 +69,13 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
       await api.post(`/api/coloc/${colocId}/board`, {
         content: content.trim(),
         color,
+        size,
         linkUrl: linkUrl.trim() || null,
         type: linkUrl.trim() ? 'link' : 'text',
       })
       setContent('')
       setLinkUrl('')
+      setSize('normal')
       setShowForm(false)
       await loadItems()
     } catch (err) {
@@ -63,11 +84,56 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
   }
 
   async function deleteItem(itemId: string) {
+    // Optimistic update
+    setItems((prev) => prev.filter((i) => i.id !== itemId))
     try {
       await api.delete(`/api/coloc/${colocId}/board`, { itemId })
-      await loadItems()
     } catch (err) {
       console.error('Erreur suppression:', err)
+      await loadItems() // Revert on error
+    }
+  }
+
+  async function editItem(itemId: string, data: { content?: string; color?: string; size?: string; linkUrl?: string }) {
+    // Optimistic update
+    setItems((prev) =>
+      prev.map((i) =>
+        i.id === itemId
+          ? { ...i, ...data, type: data.linkUrl !== undefined ? (data.linkUrl ? 'link' : 'text') : i.type }
+          : i
+      )
+    )
+    try {
+      await api.patch(`/api/coloc/${colocId}/board`, { itemId, ...data })
+    } catch (err) {
+      console.error('Erreur édition:', err)
+      await loadItems() // Revert on error
+    }
+  }
+
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    setActiveId(null)
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = items.findIndex((i) => i.id === active.id)
+    const newIndex = items.findIndex((i) => i.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const newItems = arrayMove(items, oldIndex, newIndex)
+    // Update positions
+    const withPositions = newItems.map((item, index) => ({ ...item, position: index }))
+    setItems(withPositions)
+
+    try {
+      await api.patch(`/api/coloc/${colocId}/board`, {
+        action: 'reorder',
+        items: withPositions.map((item) => ({ id: item.id, position: item.position })),
+      })
+    } catch (err) {
+      console.error('Erreur reorder:', err)
+      await loadItems()
     }
   }
 
@@ -88,50 +154,77 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
       </div>
 
       {/* Formulaire */}
-      {showForm && (
-        <div className="card card-glow p-4 space-y-3">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Ecris ta note ici..."
-            rows={3}
-            className="w-full px-3 py-2 border border-b rounded-lg text-sm resize-none text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
-          />
-          <input
-            type="url"
-            value={linkUrl}
-            onChange={(e) => setLinkUrl(e.target.value)}
-            placeholder="Lien (optionnel)"
-            className="w-full px-3 py-2 border border-b rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
-          />
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-t-muted">Couleur :</span>
-            {Object.keys(NOTE_COLORS).map((c) => (
+      <AnimatePresence>
+        {showForm && (
+          <div className="card card-glow p-4 space-y-3">
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Ecris ta note ici..."
+              rows={3}
+              className="w-full px-3 py-2 border border-b rounded-lg text-sm resize-none text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+            <input
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              placeholder="Lien (optionnel)"
+              className="w-full px-3 py-2 border border-b rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+            <p className="text-[10px] text-t-faint">Formatage : **gras** · *italique* · - liste</p>
+
+            {/* Couleur */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-t-muted">Couleur :</span>
+              {Object.keys(NOTE_COLORS).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setColor(c)}
+                  className={`w-7 h-7 rounded-lg ${NOTE_COLORS[c].bg} ${NOTE_COLORS[c].border} border-2 ${
+                    color === c ? 'ring-2 ring-offset-1 ring-accent/50' : ''
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Taille */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-t-muted">Taille :</span>
               <button
-                key={c}
-                onClick={() => setColor(c)}
-                className={`w-7 h-7 rounded-lg ${NOTE_COLORS[c].bg} ${NOTE_COLORS[c].border} border-2 ${
-                  color === c ? 'ring-2 ring-offset-1 ring-accent/50' : ''
+                onClick={() => setSize('normal')}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+                  size === 'normal' ? 'bg-accent text-white' : 'bg-surface-hover text-t-muted'
                 }`}
-              />
-            ))}
+              >
+                Normal
+              </button>
+              <button
+                onClick={() => setSize('large')}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+                  size === 'large' ? 'bg-accent text-white' : 'bg-surface-hover text-t-muted'
+                }`}
+              >
+                Large (2 colonnes)
+              </button>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={createItem}
+                className="btn-glow px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition"
+              >
+                Publier
+              </button>
+              <button
+                onClick={() => setShowForm(false)}
+                className="px-4 py-2 bg-surface-hover text-t-muted rounded-lg text-sm font-medium hover:text-t-primary transition"
+              >
+                Annuler
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={createItem}
-              className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition"
-            >
-              Publier
-            </button>
-            <button
-              onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-surface-hover text-t-muted rounded-lg text-sm font-medium hover:text-t-primary transition"
-            >
-              Annuler
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Grille de post-its */}
       {items.length === 0 ? (
@@ -139,50 +232,29 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
           Aucune note pour l&apos;instant. Ajoute la première !
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {items.map((item) => {
-            const colors = NOTE_COLORS[item.color] || NOTE_COLORS.yellow
-            return (
-              <div
-                key={item.id}
-                className={`${colors.bg} ${colors.border} border rounded-xl p-4 relative group`}
-                style={{ boxShadow: 'var(--shadow)' }}
-              >
-                {/* Bouton supprimer */}
-                <button
-                  onClick={() => deleteItem(item.id)}
-                  className="absolute top-2 right-2 text-t-faint hover:text-danger opacity-0 group-hover:opacity-100 transition text-xs"
-                >
-                  ✕
-                </button>
-
-                <p className={`text-sm whitespace-pre-wrap break-words ${colors.text}`}>
-                  {item.content}
-                </p>
-
-                {item.linkUrl && (
-                  <a
-                    href={item.linkUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-accent underline mt-2 block truncate"
-                  >
-                    {item.linkUrl}
-                  </a>
-                )}
-
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-[10px] text-t-muted">
-                    {item.createdBy.username}
-                  </span>
-                  <span className="text-[10px] text-t-faint">
-                    {new Date(item.createdAt).toLocaleDateString('fr-FR')}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={(event) => setActiveId(String(event.active.id))}
+          onDragEnd={handleDragEnd}
+          onDragCancel={() => setActiveId(null)}
+        >
+          <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <AnimatePresence mode="popLayout">
+                {items.map((item) => (
+                  <BoardNote
+                    key={item.id}
+                    item={item}
+                    onDelete={deleteItem}
+                    onEdit={editItem}
+                    isDragging={activeId === item.id}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   )

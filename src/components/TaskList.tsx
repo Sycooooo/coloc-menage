@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { XP_REWARDS, DIFFICULTY_LABELS, DIFFICULTY_COLORS, CATEGORY_ICONS, CATEGORY_LABELS, ROOM_LABELS } from '@/lib/xp'
 import { api } from '@/lib/api'
+import { StaggerContainer, StaggerItem } from '@/components/motion/StaggerList'
 import type { Task } from '@/types'
 
 function Confetti() {
@@ -120,10 +121,10 @@ export default function TaskList({
             Toutes les tâches sont faites ! 🎉
           </div>
         ) : (
-          <div className="space-y-2">
+          <StaggerContainer className="space-y-2">
             {pending.map((task) => (
+              <StaggerItem key={task.id}>
               <div
-                key={task.id}
                 className="bg-surface rounded-xl border border-b p-4 flex items-center gap-4 relative overflow-hidden"
               >
                 {/* Popup récompenses animé */}
@@ -244,8 +245,9 @@ export default function TaskList({
                   </button>
                 ) : null}
               </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         )}
       </div>
 

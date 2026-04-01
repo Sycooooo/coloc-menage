@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import Menu from '@/components/Menu'
+import PageTransition from '@/components/PageTransition'
 
 export default async function MenuPage({
   params,
@@ -51,7 +52,9 @@ export default async function MenuPage({
       </header>
 
       <main className="max-w-4xl mx-auto p-6">
-        <Menu colocId={id} initialMenu={initialMenu} />
+        <PageTransition>
+          <Menu colocId={id} initialMenu={initialMenu} />
+        </PageTransition>
       </main>
     </div>
   )

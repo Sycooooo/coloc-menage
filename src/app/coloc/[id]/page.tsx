@@ -7,6 +7,7 @@ import AddTaskForm from '@/components/AddTaskForm'
 import NotificationBell from '@/components/NotificationBell'
 import ThemeToggle from '@/components/ThemeToggle'
 import { autoGenerateQuests } from '@/lib/quest-generator'
+import PageTransition from '@/components/PageTransition'
 
 export default async function ColocPage({
   params,
@@ -105,6 +106,7 @@ export default async function ColocPage({
       </header>
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
+        <PageTransition>
         {/* Code d'invitation */}
         <div className="bg-accent-secondary/10 border border-accent-secondary/20 rounded-xl p-4 flex items-center justify-between">
           <div>
@@ -158,6 +160,7 @@ export default async function ColocPage({
           tasks={coloc.tasks}
           currentUserId={userId}
         />
+        </PageTransition>
       </main>
     </div>
   )

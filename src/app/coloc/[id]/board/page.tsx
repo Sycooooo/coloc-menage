@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import Board from '@/components/Board'
+import PageTransition from '@/components/PageTransition'
 
 export default async function BoardPage({
   params,
@@ -36,7 +37,9 @@ export default async function BoardPage({
       </header>
 
       <main className="max-w-4xl mx-auto p-6">
-        <Board colocId={id} currentUserId={session.user.id} />
+        <PageTransition>
+          <Board colocId={id} currentUserId={session.user.id} />
+        </PageTransition>
       </main>
     </div>
   )

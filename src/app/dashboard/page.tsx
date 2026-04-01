@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { signOut } from '@/lib/auth'
 import ThemeToggle from '@/components/ThemeToggle'
+import PageTransition from '@/components/PageTransition'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -44,6 +45,7 @@ export default async function DashboardPage() {
       </header>
 
       <main className="max-w-4xl mx-auto p-6">
+        <PageTransition>
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-3xl tracking-wide text-t-primary uppercase neon-title">Mes colocations</h2>
           <Link
@@ -119,6 +121,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
         )}
+        </PageTransition>
       </main>
     </div>
   )

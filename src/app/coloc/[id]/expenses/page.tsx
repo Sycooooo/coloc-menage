@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import Expenses from '@/components/Expenses'
 import NotificationBell from '@/components/NotificationBell'
+import PageTransition from '@/components/PageTransition'
 
 export default async function ExpensesPage({
   params,
@@ -43,7 +44,9 @@ export default async function ExpensesPage({
       </header>
 
       <main className="max-w-2xl mx-auto p-6">
-        <Expenses colocId={id} currentUserId={session.user!.id} />
+        <PageTransition>
+          <Expenses colocId={id} currentUserId={session.user!.id} />
+        </PageTransition>
       </main>
     </div>
   )
