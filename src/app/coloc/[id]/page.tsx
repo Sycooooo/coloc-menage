@@ -92,6 +92,12 @@ export default async function ColocPage({
           >
             💰 Dépenses
           </Link>
+          <Link
+            href={`/coloc/${id}/maison`}
+            className="text-xs bg-surface-hover text-t-muted px-3 py-1.5 rounded-full font-medium hover:text-t-primary transition"
+          >
+            🏠 Maison
+          </Link>
           {isAdmin && (
             <Link
               href={`/coloc/${id}/admin`}
