@@ -55,9 +55,70 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
   )
 
+  // Drop zone state
+  const [dragOver, setDragOver] = useState(false)
+  const dropRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     loadItems()
   }, [])
+
+  // Global drag-and-drop d'image sur la page
+  useEffect(() => {
+    const el = dropRef.current
+    if (!el) return
+
+    function handleDragEnter(e: DragEvent) {
+      e.preventDefault()
+      if (e.dataTransfer?.types.includes('Files')) {
+        setDragOver(true)
+      }
+    }
+    function handleDragOver(e: DragEvent) {
+      e.preventDefault()
+    }
+    function handleDragLeave(e: DragEvent) {
+      // Only hide if we actually left the container
+      if (el && !el.contains(e.relatedTarget as Node)) {
+        setDragOver(false)
+      }
+    }
+    async function handleDrop(e: DragEvent) {
+      e.preventDefault()
+      setDragOver(false)
+      const file = e.dataTransfer?.files?.[0]
+      if (!file || !file.type.startsWith('image/')) return
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image trop grande (max 5Mo)')
+        return
+      }
+      // Upload directement
+      setUploading(true)
+      try {
+        const formData = new FormData()
+        formData.append('image', file)
+        formData.append('color', 'yellow')
+        formData.append('size', 'normal')
+        formData.append('content', file.name.replace(/\.[^.]+$/, ''))
+        await api.upload(`/api/coloc/${colocId}/board/upload`, formData)
+        await loadItems()
+      } catch (err) {
+        console.error('Erreur upload drop:', err)
+      }
+      setUploading(false)
+    }
+
+    el.addEventListener('dragenter', handleDragEnter)
+    el.addEventListener('dragover', handleDragOver)
+    el.addEventListener('dragleave', handleDragLeave)
+    el.addEventListener('drop', handleDrop)
+    return () => {
+      el.removeEventListener('dragenter', handleDragEnter)
+      el.removeEventListener('dragover', handleDragOver)
+      el.removeEventListener('dragleave', handleDragLeave)
+      el.removeEventListener('drop', handleDrop)
+    }
+  }, [colocId])
 
   async function loadItems() {
     try {
@@ -208,7 +269,24 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
   }
 
   return (
-    <div className="space-y-4">
+    <div ref={dropRef} className="space-y-4 relative">
+      {/* Drop overlay */}
+      {dragOver && (
+        <div className="fixed inset-0 z-50 bg-accent/10 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+          <div className="bg-surface border-2 border-dashed border-accent rounded-2xl p-12 text-center">
+            <p className="text-4xl mb-3">📷</p>
+            <p className="text-lg font-semibold text-accent">Dépose ton image ici</p>
+            <p className="text-sm text-t-muted mt-1">Elle sera ajoutée comme post-it</p>
+          </div>
+        </div>
+      )}
+
+      {uploading && !showForm && (
+        <div className="card p-3 text-center text-sm text-accent animate-pulse">
+          Upload en cours...
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <p className="text-sm text-t-muted">{items.length} note{items.length !== 1 ? 's' : ''}</p>
         <button
