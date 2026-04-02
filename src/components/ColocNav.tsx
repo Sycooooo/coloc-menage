@@ -112,7 +112,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
   ]
 
   return (
-    <nav aria-label="Navigation principale" className="fixed bottom-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-lg border-t border-b">
+    <nav aria-label="Navigation principale" className="fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a14]/80 backdrop-blur-xl border-t border-[rgba(192,132,252,0.08)]" style={{ boxShadow: '0 -4px 20px rgba(0,0,0,0.3)' }}>
       <div className="flex items-center justify-around max-w-lg mx-auto py-1.5">
         {links.map((link) => {
           const isActive = link.match(pathname)
@@ -126,7 +126,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
                 isActive ? 'text-accent' : 'text-t-muted hover:text-t-primary'
               }`}
             >
-              <span className="text-lg relative">
+              <span className={`text-lg relative ${isActive ? 'drop-shadow-[0_0_6px_rgba(192,132,252,0.4)]' : ''}`}>
                 {link.icon}
                 {hasUnread && (
                   <span role="status" aria-label="Non lu" className="absolute -top-1 -right-1.5 w-2.5 h-2.5 bg-danger rounded-full border-2 border-surface animate-pulse" />

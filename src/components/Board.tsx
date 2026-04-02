@@ -291,7 +291,7 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
       {/* Drop overlay */}
       {dragOver && (
         <div className="fixed inset-0 z-50 bg-accent/10 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-surface border-2 border-dashed border-accent rounded-2xl p-12 text-center pointer-events-none">
+          <div className="bg-surface border-2 border-dashed border-accent/40 rounded-xl p-12 text-center pointer-events-none">
             <p className="text-4xl mb-3">📷</p>
             <p className="text-lg font-semibold text-accent">Dépose ton image ici</p>
             <p className="text-sm text-t-muted mt-1">Elle sera ajoutée comme post-it</p>
@@ -328,7 +328,7 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
             className="card card-glow p-4 space-y-3 overflow-hidden"
           >
             {/* Toolbar de formatage */}
-            <div className="flex items-center gap-1 border-b border-b pb-2">
+            <div className="flex items-center gap-1 border-b border-[var(--border)] pb-2">
               <button
                 type="button"
                 onClick={() => wrapSelection('**', '**')}
@@ -377,13 +377,13 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
               onChange={(e) => setContent(e.target.value)}
               placeholder="Ecris ta note ici..."
               rows={3}
-              className="w-full px-3 py-2 border border-b rounded-lg text-sm resize-none text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm resize-none text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
             />
 
             {/* Image preview */}
             {imagePreview && (
               <div className="relative inline-block">
-                <img src={imagePreview} alt="Preview" className="max-h-40 rounded-lg border border-b" />
+                <img src={imagePreview} alt="Preview" className="max-h-40 rounded-lg border border-[var(--border)]" />
                 <button
                   onClick={clearImage}
                   className="absolute -top-2 -right-2 w-5 h-5 bg-danger text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 transition"
@@ -399,7 +399,7 @@ export default function Board({ colocId, currentUserId }: { colocId: string; cur
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 placeholder="Lien (optionnel)"
-                className="w-full px-3 py-2 border border-b rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             )}
 

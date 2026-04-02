@@ -63,9 +63,9 @@ export const DIFFICULTY_LABELS: Record<string, string> = {
 }
 
 export const DIFFICULTY_COLORS: Record<string, string> = {
-  easy: 'bg-green-500/15 text-green-400 dark:bg-green-500/15 dark:text-green-400',
-  medium: 'bg-yellow-500/15 text-yellow-600 dark:bg-yellow-500/15 dark:text-yellow-400',
-  hard: 'bg-red-500/15 text-red-600 dark:bg-red-500/15 dark:text-red-400',
+  easy: 'bg-[#4ade80]/15 text-[#4ade80] border border-[#4ade80]/30',
+  medium: 'bg-accent-secondary/15 text-accent-secondary border border-accent-secondary/30',
+  hard: 'bg-accent-tertiary/15 text-accent-tertiary border border-accent-tertiary/30',
 }
 
 export const CATEGORY_LABELS: Record<string, string> = {

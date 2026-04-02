@@ -204,7 +204,7 @@ export default function TaskList({
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-surface rounded-2xl border border-b p-8 text-center text-t-faint"
+            className="bg-surface rounded-xl border border-b p-8 text-center text-t-faint"
           >
             Toutes les tâches sont faites ! 🎉
           </motion.div>
@@ -216,7 +216,7 @@ export default function TaskList({
                 layout
                 whileHover={{ y: -2, boxShadow: 'var(--shadow-lg)' }}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                className="bg-surface rounded-xl border border-b p-4 flex items-center gap-4 relative overflow-hidden"
+                className="bg-surface rounded-lg border border-[var(--border)] backdrop-blur-sm p-4 flex items-center gap-4 relative overflow-hidden"
               >
                 {/* Popup récompenses animé */}
                 <AnimatePresence>
@@ -226,7 +226,7 @@ export default function TaskList({
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 1.1 }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                      className="absolute inset-0 bg-accent flex items-center justify-center rounded-xl z-10"
+                      className="absolute inset-0 bg-accent flex items-center justify-center rounded-lg z-10"
                     >
                       <Confetti />
                       <div className="text-center text-white z-20">
@@ -359,7 +359,7 @@ export default function TaskList({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 0.5, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-surface rounded-xl border border-b p-4 flex items-center gap-4"
+                className="bg-surface rounded-lg border border-[var(--border)] backdrop-blur-sm p-4 flex items-center gap-4"
               >
                 <motion.div
                   initial={{ scale: 0 }}

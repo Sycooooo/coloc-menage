@@ -171,7 +171,7 @@ export default function BoardNote({
       exit={{ opacity: 0, scale: 0.5, y: 20 }}
       whileHover={!editing ? { scale: 1.02, rotate: 0.5 } : undefined}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      className={`${colors.bg} ${colors.border} border rounded-xl p-4 relative group ${
+      className={`${colors.bg} ${colors.border} border rounded-lg backdrop-blur-sm p-4 relative group ${
         item.size === 'large' ? 'col-span-2' : ''
       } ${isDragging ? 'z-50 shadow-2xl opacity-80' : ''}`}
     >

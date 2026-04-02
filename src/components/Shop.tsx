@@ -74,7 +74,7 @@ export default function Shop({ initialItems, initialCurrency }: Props) {
       <div className="card card-glow p-5 flex items-center justify-between">
         <div>
           <p className="text-sm text-t-muted">Mon solde</p>
-          <p className="text-3xl font-bold text-accent stat-number">{currency} <span className="text-xl">🪙</span></p>
+          <p className="text-3xl font-bold text-accent-secondary stat-number">{currency} <span className="text-xl">🪙</span></p>
         </div>
         <p className="text-xs text-t-faint max-w-[160px] text-right">
           Gagne des coins en complétant des tâches moyennes et difficiles
@@ -108,12 +108,12 @@ export default function Shop({ initialItems, initialCurrency }: Props) {
               exit={{ opacity: 0, scale: 0.9 }}
               whileHover={!item.owned ? { y: -4, scale: 1.02 } : {}}
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              className={`card p-4 flex flex-col items-center gap-3 ${
+              className={`bg-surface border border-[var(--border)] rounded-lg backdrop-blur-sm p-4 flex flex-col items-center gap-3 ${
                 item.owned ? 'opacity-60' : ''
               }`}
             >
               {/* Sprite preview */}
-              <div className="w-20 h-20 bg-bg-secondary rounded-xl flex items-center justify-center overflow-hidden">
+              <div className="w-20 h-20 bg-bg-secondary rounded-lg flex items-center justify-center overflow-hidden">
                 <img
                   src={getSpriteUrl(item.layer, item.spriteName)}
                   alt={item.name}

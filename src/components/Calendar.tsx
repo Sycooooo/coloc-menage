@@ -173,7 +173,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
           <button
             type="button"
             onClick={() => setYear(year - 1)}
-            className="w-10 h-10 flex items-center justify-center bg-surface border border-b rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
+            className="w-10 h-10 flex items-center justify-center bg-surface border border-[var(--border)] rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
           >
             &larr;
           </button>
@@ -183,7 +183,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
           <button
             type="button"
             onClick={() => setYear(year + 1)}
-            className="w-10 h-10 flex items-center justify-center bg-surface border border-b rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
+            className="w-10 h-10 flex items-center justify-center bg-surface border border-[var(--border)] rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
           >
             &rarr;
           </button>
@@ -205,8 +205,8 @@ export default function Calendar({ colocId }: { colocId: string }) {
                 whileHover={{ y: -3, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                className={`bg-surface rounded-xl border p-3 cursor-pointer hover:border-accent/50 transition-colors ${
-                  isCurrentMonth ? 'border-accent' : 'border-b'
+                className={`bg-surface rounded-lg border p-3 cursor-pointer hover:border-accent/50 transition-colors ${
+                  isCurrentMonth ? 'border-accent' : 'border-[var(--border)]'
                 }`}
                 style={{ boxShadow: isCurrentMonth ? 'var(--shadow)' : undefined }}
               >
@@ -275,7 +275,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
             if (month === 0) { setMonth(11); setYear(year - 1) }
             else setMonth(month - 1)
           }}
-          className="w-10 h-10 flex items-center justify-center bg-surface border border-b rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
+          className="w-10 h-10 flex items-center justify-center bg-surface border border-[var(--border)] rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
         >
           &larr;
         </button>
@@ -292,7 +292,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
             if (month === 11) { setMonth(0); setYear(year + 1) }
             else setMonth(month + 1)
           }}
-          className="w-10 h-10 flex items-center justify-center bg-surface border border-b rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
+          className="w-10 h-10 flex items-center justify-center bg-surface border border-[var(--border)] rounded-lg text-lg font-bold text-t-muted hover:bg-surface-hover transition"
         >
           &rarr;
         </button>
@@ -300,7 +300,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
 
       {/* Grille calendrier */}
       <div className="card overflow-hidden">
-        <div className="grid grid-cols-7 bg-surface-hover border-b border-b">
+        <div className="grid grid-cols-7 bg-surface-hover border-b border-[var(--border)]">
           {DAY_NAMES.map((d) => (
             <div key={d} className="text-center text-xs font-medium text-t-muted py-2">{d}</div>
           ))}
@@ -308,7 +308,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
 
         <div className="grid grid-cols-7">
           {Array.from({ length: startOffset }).map((_, i) => (
-            <div key={`empty-${i}`} className="h-20 border-b border-r border-b/50 bg-surface/50" />
+            <div key={`empty-${i}`} className="h-20 border-b border-r border-[var(--border)]/50 bg-surface/50" />
           ))}
 
           {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -321,7 +321,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
               <div
                 key={day}
                 onClick={() => { setSelectedDay(day); setShowForm(true) }}
-                className={`h-20 border-b border-r border-b/50 p-1 cursor-pointer hover:bg-accent/5 transition ${
+                className={`h-20 border-b border-r border-[var(--border)]/50 p-1 cursor-pointer hover:bg-accent/5 transition ${
                   isSelected ? 'bg-accent/10' : ''
                 }`}
               >
@@ -374,14 +374,14 @@ export default function Calendar({ colocId }: { colocId: string }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Titre de l'événement"
-            className="w-full px-3 py-2 border border-b rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Description (optionnel)"
-            className="w-full px-3 py-2 border border-b rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+            className="w-full px-3 py-2 border border-[var(--border)] rounded-lg text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <div className="flex items-center gap-4">
             <label className="flex items-center gap-2 text-sm text-t-muted">
@@ -398,7 +398,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
                 type="time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="px-2 py-1 border border-b rounded-lg text-sm text-t-primary bg-input-bg"
+                className="px-2 py-1 border border-[var(--border)] rounded-lg text-sm text-t-primary bg-input-bg"
               />
             )}
           </div>

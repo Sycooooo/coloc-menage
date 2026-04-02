@@ -150,7 +150,7 @@ export default async function ProfilePage() {
         </div>
 
         {/* Achievements */}
-        <div className="bg-surface rounded-2xl border border-b p-5" style={{ boxShadow: 'var(--shadow)' }}>
+        <div className="bg-[#161628]/95 backdrop-blur-md rounded-xl border border-[var(--border)] p-5" style={{ boxShadow: 'var(--shadow)' }}>
           <h3 className="font-semibold text-t-primary mb-4">
             Achievements ({user.achievements.length}/{allAchievements.length})
           </h3>
@@ -160,10 +160,10 @@ export default async function ProfilePage() {
               return (
                 <div
                   key={achievement.id}
-                  className={`rounded-xl p-3 text-center border ${
+                  className={`rounded-lg p-3 text-center border ${
                     unlocked
-                      ? 'bg-accent/10 border-accent/30'
-                      : 'bg-surface-hover border-b opacity-40'
+                      ? 'bg-[#1e1e38]/95 border-accent/30'
+                      : 'bg-[#161628]/90 border-[var(--border)] text-t-faint'
                   }`}
                 >
                   <div className="text-2xl mb-1">{achievement.icon}</div>
@@ -179,19 +179,19 @@ export default async function ProfilePage() {
         </div>
 
         {/* Récompenses par tâche */}
-        <div className="bg-surface rounded-2xl border border-b p-5" style={{ boxShadow: 'var(--shadow)' }}>
+        <div className="bg-[#161628]/95 backdrop-blur-md rounded-xl border border-[var(--border)] p-5" style={{ boxShadow: 'var(--shadow)' }}>
           <h3 className="font-semibold text-t-primary mb-3">Récompenses par tâche</h3>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="px-3 py-1 bg-green-500/15 text-green-600 dark:text-green-400 rounded-full text-sm font-medium">Facile</span>
+              <span className="px-3 py-1 bg-[#4ade80]/15 text-[#4ade80] rounded-full text-sm font-medium">Facile</span>
               <span className="font-bold text-t-muted">+20 XP</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="px-3 py-1 bg-yellow-500/15 text-yellow-600 dark:text-yellow-400 rounded-full text-sm font-medium">Moyen</span>
+              <span className="px-3 py-1 bg-accent-secondary/15 text-accent-secondary rounded-full text-sm font-medium">Moyen</span>
               <span className="font-bold text-t-muted">+50 XP · +5 🪙</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="px-3 py-1 bg-red-500/15 text-red-600 dark:text-red-400 rounded-full text-sm font-medium">Difficile</span>
+              <span className="px-3 py-1 bg-accent-tertiary/15 text-accent-tertiary rounded-full text-sm font-medium">Difficile</span>
               <span className="font-bold text-t-muted">+100 XP · +15 🪙</span>
             </div>
           </div>

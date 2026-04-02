@@ -164,10 +164,15 @@ body::after {
 .card {
   background: var(--surface);
   border: 1px solid var(--card-border);
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+}
+.dark .card {
+  background: rgba(22, 22, 40, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .card::before {
   content: "";

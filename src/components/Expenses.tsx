@@ -310,11 +310,11 @@ export default function Expenses({
     <div className="space-y-6">
       {/* Résumé */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="card card-glow p-5 text-center">
+        <div className="card card-glow backdrop-blur-sm p-5 text-center">
           <p className="text-sm text-t-muted">Total dépenses</p>
           <p className="text-2xl font-bold text-t-primary mt-1 stat-number">{totalExpenses.toFixed(2)}€</p>
         </div>
-        <div className="card card-glow p-5 text-center">
+        <div className="card card-glow backdrop-blur-sm p-5 text-center">
           <p className="text-sm text-t-muted">Nombre</p>
           <p className="text-2xl font-bold text-t-primary mt-1 stat-number">{expenses.length}</p>
         </div>
@@ -354,12 +354,12 @@ export default function Expenses({
 
       {/* Remboursements optimaux */}
       {settlements.length > 0 && (
-        <div className="bg-accent-secondary/10 border border-accent-secondary/20 rounded-2xl p-5" style={{ boxShadow: 'var(--shadow)' }}>
+        <div className="bg-accent-secondary/10 border border-accent-secondary/20 rounded-xl p-5" style={{ boxShadow: 'var(--shadow)' }}>
           <h3 className="font-semibold text-accent mb-3">Remboursements simplifiés</h3>
           <p className="text-xs text-accent mb-3">Le minimum de virements pour tout équilibrer</p>
           <div className="space-y-3">
             {settlements.map((s, i) => (
-              <div key={i} className="bg-surface/60 rounded-xl p-3 flex items-center justify-between">
+              <div key={i} className="bg-surface/60 rounded-lg p-3 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm">
                   <div className="w-7 h-7 rounded-full bg-danger/15 flex items-center justify-center text-xs font-medium text-danger">
                     {getMemberName(s.from)[0].toUpperCase()}
@@ -402,7 +402,7 @@ export default function Expenses({
           ) : (
             <div className="space-y-4">
               {getDetailedDebts().map((pair, i) => (
-                <div key={i} className="border border-b rounded-xl p-4">
+                <div key={i} className="border border-[var(--border)] rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2 text-sm">
                       <span className="font-semibold text-danger">{getMemberName(pair.from)}</span>
@@ -473,7 +473,7 @@ export default function Expenses({
               min="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full border border-b rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="12.50"
               required
             />
@@ -485,7 +485,7 @@ export default function Expenses({
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-b rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="Courses Carrefour"
               required
             />
@@ -496,7 +496,7 @@ export default function Expenses({
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full border border-b rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
             >
               {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
                 <option key={key} value={key}>
@@ -542,10 +542,10 @@ export default function Expenses({
                     onClick={() => setSplitMethod(method)}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.97 }}
-                    className={`p-3 rounded-xl text-left transition-colors border ${
+                    className={`p-3 rounded-lg text-left transition-colors border ${
                       splitMethod === method
                         ? 'border-accent bg-accent-secondary/10'
-                        : 'border-b bg-surface hover:border-b-hover'
+                        : 'border-[var(--border)] bg-surface hover:border-b-hover'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -561,7 +561,7 @@ export default function Expenses({
 
           {/* Inputs custom selon la méthode */}
           {splitMethod !== 'equal' && selectedMembers.length > 0 && (
-            <div className="bg-bg-secondary rounded-xl p-4 space-y-3">
+            <div className="bg-bg-secondary rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-xs font-medium text-t-muted">
                   {splitMethod === 'exact' && 'Montant par personne (€)'}
@@ -591,7 +591,7 @@ export default function Expenses({
                     min="0"
                     value={customValues[userId] || ''}
                     onChange={(e) => setCustomValues((prev) => ({ ...prev, [userId]: e.target.value }))}
-                    className="flex-1 border border-b rounded-lg px-3 py-1.5 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="flex-1 border border-[var(--border)] rounded-lg px-3 py-1.5 text-sm text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder={splitMethod === 'shares' ? '1' : '0'}
                   />
                   {splitMethod !== 'shares' && (
@@ -604,7 +604,7 @@ export default function Expenses({
 
           {/* Aperçu du partage */}
           {selectedMembers.length > 0 && amount && (
-            <div className="bg-bg-secondary rounded-xl p-3">
+            <div className="bg-bg-secondary rounded-lg p-3">
               <p className="text-xs font-medium text-t-muted mb-2">Aperçu</p>
               <div className="space-y-1">
                 {selectedMembers.map((userId) => (
@@ -652,7 +652,7 @@ export default function Expenses({
               const isEqual = expense.splits.length > 1 &&
                 expense.splits.every((s) => Math.abs(s.amount - expense.splits[0].amount) < 0.02)
               return (
-                <div key={expense.id} className="flex items-start justify-between border-b border-b pb-3 last:border-0 last:pb-0">
+                <div key={expense.id} className="flex items-start justify-between border-b border-[var(--border)] pb-3 last:border-0 last:pb-0">
                   <div className="flex items-start gap-3">
                     <span className="text-lg">{CATEGORY_ICONS[expense.category] || '📦'}</span>
                     <div>

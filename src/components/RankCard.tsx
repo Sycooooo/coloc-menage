@@ -31,7 +31,7 @@ function AllRanksModal({
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-surface rounded-2xl border border-b max-w-md w-full max-h-[85vh] overflow-y-auto"
+            className="bg-surface rounded-lg border border-b max-w-md w-full max-h-[85vh] overflow-y-auto"
             style={{ boxShadow: 'var(--shadow-lg)' }}
           >
             {/* Header */}
@@ -151,7 +151,7 @@ export default function RankCard({
 
   return (
     <>
-      <div className="card card-glow p-5 relative overflow-hidden">
+      <div className="card card-glow p-5 relative overflow-hidden backdrop-blur-sm">
         {/* Glow de fond */}
         <div
           className="absolute inset-0 opacity-10 pointer-events-none"
@@ -191,7 +191,7 @@ export default function RankCard({
                   {rank.pointsForNextDiv} RP
                 </span>
               </div>
-              <div className="w-full bg-surface-hover rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-[#0a0a14]/50 rounded-full h-3 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${rank.progressPercent}%` }}

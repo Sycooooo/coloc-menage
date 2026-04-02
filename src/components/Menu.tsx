@@ -139,7 +139,7 @@ export default function Menu({
               <select
                 value={nbPersons}
                 onChange={(e) => setNbPersons(Number(e.target.value))}
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
                   <option key={n} value={n}>{n} personne{n > 1 ? 's' : ''}</option>
@@ -152,7 +152,7 @@ export default function Menu({
               <select
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="economique">Economique</option>
                 <option value="moyen">Moyen</option>
@@ -167,7 +167,7 @@ export default function Menu({
                 value={restrictions}
                 onChange={(e) => setRestrictions(e.target.value)}
                 placeholder="végétarien, sans gluten, halal..."
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function Menu({
               <select
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="">Aucun</option>
                 <option value="prise_masse">Prise de masse</option>
@@ -196,7 +196,7 @@ export default function Menu({
                 value={calories}
                 onChange={(e) => setCalories(e.target.value)}
                 placeholder="ex: 2200"
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
@@ -207,7 +207,7 @@ export default function Menu({
                 value={preferences}
                 onChange={(e) => setPreferences(e.target.value)}
                 placeholder="cuisine asiatique, italien, rapide..."
-                className="w-full px-3 py-2 text-sm border border-b rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-lg text-t-primary bg-input-bg focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
           </div>
@@ -293,14 +293,14 @@ export default function Menu({
                 const meal = menu.meals[day]
                 if (!meal) return null
                 return (
-                  <div key={day} className="card card-glow p-4">
+                  <div key={day} className="card card-glow backdrop-blur-sm p-4">
                     <p className="font-semibold text-t-primary mb-3">
                       {DAY_EMOJIS[day]} {day}
                     </p>
 
                     <div className="space-y-3">
                       <PlatCard label="Déjeuner" plat={meal.dejeuner} />
-                      <div className="border-t border-b pt-3">
+                      <div className="border-t border-[var(--border)] pt-3">
                         <PlatCard label="Dîner" plat={meal.diner} />
                       </div>
                     </div>

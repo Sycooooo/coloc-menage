@@ -65,7 +65,7 @@ export default function AddTaskForm({
           exit={{ opacity: 0, y: -10 }}
           whileHover={{ scale: 1.01, borderColor: 'var(--accent)' }}
           whileTap={{ scale: 0.99 }}
-          className="w-full py-3 border-2 border-dashed border-b-hover rounded-xl text-t-muted hover:border-accent hover:text-accent transition-colors font-medium"
+          className="w-full py-3 border-2 border-dashed border-b-hover rounded-lg text-t-muted hover:border-accent hover:text-accent transition-colors font-medium"
         >
           + Ajouter une tâche
         </motion.button>
@@ -76,7 +76,7 @@ export default function AddTaskForm({
           animate={{ opacity: 1, height: 'auto', y: 0 }}
           exit={{ opacity: 0, height: 0, y: -8 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="bg-surface rounded-2xl border border-accent/30 p-5 overflow-hidden"
+          className="bg-surface rounded-xl border border-accent/20 p-5 overflow-hidden"
           style={{ boxShadow: 'var(--shadow)' }}
         >
           <h3 className="font-semibold text-t-primary mb-4">Nouvelle tâche</h3>
@@ -103,9 +103,9 @@ export default function AddTaskForm({
               <label className="block text-sm font-medium text-t-muted mb-2">Difficulté</label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { value: 'easy', label: 'Facile', xp: '+20 XP', color: 'border-green-500 bg-green-500/15 text-green-600 dark:text-green-400' },
-                  { value: 'medium', label: 'Moyen', xp: '+50 XP', color: 'border-yellow-500 bg-yellow-500/15 text-yellow-600 dark:text-yellow-400' },
-                  { value: 'hard', label: 'Difficile', xp: '+100 XP', color: 'border-red-500 bg-red-500/15 text-red-600 dark:text-red-400' },
+                  { value: 'easy', label: 'Facile', xp: '+20 XP', color: 'border-[#4ade80] bg-[#4ade80]/15 text-[#4ade80]' },
+                  { value: 'medium', label: 'Moyen', xp: '+50 XP', color: 'border-accent-secondary bg-accent-secondary/15 text-accent-secondary' },
+                  { value: 'hard', label: 'Difficile', xp: '+100 XP', color: 'border-accent-tertiary bg-accent-tertiary/15 text-accent-tertiary' },
                 ].map((d) => (
                   <motion.button
                     key={d.value}
