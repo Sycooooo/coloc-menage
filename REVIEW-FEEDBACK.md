@@ -1,8 +1,8 @@
-# Review Feedback — Step 5a: Restyle TaskList, AddTaskForm, ColocNav
+# Review Feedback — Step 5c: Restyle Board, Calendar, Expenses, Menu
 
-## Verdict: APPROVED
+## Verdict: APPROVED (after fix)
 
-All four files pass every check. No blocking or non-blocking issues.
+All 5 files pass every check. One non-blocking issue found (`hover:border-b-hover` leftover in Expenses.tsx) — fixed in follow-up.
 
 ---
 
@@ -12,26 +12,32 @@ All four files pass every check. No blocking or non-blocking issues.
 |---|---|
 | Only CSS classes changed, no logic modifications | PASS |
 | Border radii reduced consistently | PASS |
-| Difficulty colors use lofi palette | PASS |
-| ColocNav darker bg | PASS |
-| ColocNav violet border | PASS |
-| ColocNav glow on active icon | PASS |
-| No Framer Motion changes | PASS |
-| Confetti untouched in TaskList | PASS |
-| xp.ts changes are color-only | PASS |
+| backdrop-blur-sm added where specified | PASS |
+| border-[var(--border)] replaces ambiguous border-b colors | PASS |
+| Post-it colors (NOTE_COLORS) untouched | PASS |
+| Event colors (COLORS, COLOR_DOTS) untouched | PASS |
+| Timer colors/functionality untouched | PASS |
+| Framer Motion animations untouched | PASS |
+| No remaining double border-b patterns | PASS |
 
 ---
 
 ## Detail
 
-**Border radii** — `rounded-2xl` to `rounded-xl` (empty state, form container), `rounded-xl` to `rounded-lg` (task cards pending/done, confetti overlay, add-task button). Consistent one-step reduction throughout.
+**Board.tsx** — Drop overlay `rounded-2xl` → `rounded-xl`, dashed border softened to `border-accent/40`. 4 form inputs (toolbar divider, textarea, image preview, link input) switched from `border-b` to `border-[var(--border)]`. One `rounded-xl` remains on drop overlay inner box — appropriate for that element size. No logic changes.
 
-**Difficulty colors** — `xp.ts` and `AddTaskForm.tsx` both use `#4ade80` (green/easy), `accent-secondary` (amber/medium), `accent-tertiary` (rose/hard). Old hardcoded Tailwind green/yellow/red classes fully replaced. Added `border` utility to `DIFFICULTY_COLORS` in xp.ts which previously had none — minor addition but CSS-only.
+**BoardNote.tsx** — Main note card `rounded-xl` → `rounded-lg`, `backdrop-blur-sm` added. NOTE_COLORS (8 colors) untouched. `border-current/10` and `border-current/20` remain on editing UI — intentional (inherits note color). Framer Motion layout/hover/exit props identical.
 
-**ColocNav** — `bg-surface/80` replaced with `bg-[#0a0a14]/80`, `backdrop-blur-lg` upgraded to `backdrop-blur-xl`, border changed to violet `rgba(192,132,252,0.08)`, inline `box-shadow` for depth. Active icon gets `drop-shadow-[0_0_6px_rgba(192,132,252,0.4)]` conditional on `isActive`. Unread badge (`bg-danger`, `animate-pulse`) untouched. Pusher logic, sound prefs, labels all identical.
+**Calendar.tsx** — 12 instances of `border-b` → `border-[var(--border)]` across nav buttons, month cards, day header, grid cells, form inputs. Month cards: `rounded-xl` → `rounded-lg`. Follow-up commit added `bg-[#161628]/65` with `backdrop-blur-sm` for lofi transparency. Event colors (COLORS, COLOR_DOTS) untouched. Today marker (`bg-accent text-white`) untouched.
 
-**TaskList** — `border-b` replaced with `border-[var(--border)]` on both pending and done cards. `backdrop-blur-sm` added to both. Confetti particle colors unchanged (`#a855f7, #c084fc, #f97316, #fb923c, #38bdf8, #e8c97a`). All Framer Motion props (`motion.*`, `AnimatePresence`, `whileHover`, `whileTap`, transitions, `layout`) identical to before. State, handlers, Pusher subscription untouched.
+**Expenses.tsx** — `rounded-2xl` → `rounded-xl` (settlements card), `rounded-xl` → `rounded-lg` (6 instances: settlement items, debt cards, split buttons, custom split container, preview). `backdrop-blur-sm` on both summary cards + settlements card. All form inputs themed. Functional colors (`text-success`, `text-danger`) preserved. **Fix applied:** `hover:border-b-hover` → `hover:border-accent/30` on split method buttons (line 548).
 
-**xp.ts** — Only the `DIFFICULTY_COLORS` map changed. All functions (`getStreakMultiplier`, `getLevel`, `getXpRequiredForLevel`, `getXpForNextLevel`), all other maps (`XP_REWARDS`, `COIN_REWARDS`, `DIFFICULTY_LABELS`, `CATEGORY_*`, `ROOM_LABELS`, `RARITY_*`) identical.
+**Menu.tsx** — 7 form inputs/selects themed with `border-[var(--border)]`. `backdrop-blur-sm` on day cards. Lunch/dinner divider: `border-t border-b` → `border-t border-[var(--border)]`. Timer colors and functionality untouched. Day emojis untouched.
+
+---
+
+## Fix Applied
+
+- `Expenses.tsx:548` — `hover:border-b-hover` → `hover:border-accent/30` (consistent hover border with lofi theme)
 
 Ship it.

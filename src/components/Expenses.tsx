@@ -545,7 +545,7 @@ export default function Expenses({
                     className={`p-3 rounded-lg text-left transition-colors border ${
                       splitMethod === method
                         ? 'border-accent bg-accent-secondary/10'
-                        : 'border-[var(--border)] bg-surface hover:border-b-hover'
+                        : 'border-[var(--border)] bg-surface hover:border-accent/30'
                     }`}
                   >
                     <div className="flex items-center gap-2">
