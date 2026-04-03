@@ -10,6 +10,7 @@ import { getRankFromPoints } from '@/lib/ranking'
 import PageTransition from '@/components/PageTransition'
 import InviteCode from '@/components/InviteCode'
 import PageAmbiance from '@/components/ui/PageAmbiance'
+import TabSwitcher from '@/components/TabSwitcher'
 
 export default async function ColocPage({
   params,
@@ -73,6 +74,8 @@ export default async function ColocPage({
           <NotificationBell />
         </div>
       </header>
+
+      <TabSwitcher colocId={id} active="tasks" />
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
         <PageTransition>

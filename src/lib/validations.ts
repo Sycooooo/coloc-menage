@@ -51,6 +51,16 @@ export const createTaskSchema = z.object({
   recurrence: z.enum(['daily', 'weekly', 'monthly']).optional().nullable(),
 })
 
+// --- Créer une habitude ---
+export const createHabitSchema = z.object({
+  title: z.string({ error: 'Titre requis' }).min(1, 'Titre requis').max(100, 'Titre trop long'),
+  description: z.string().max(500, 'Description trop longue').optional().nullable(),
+  icon: z.string().max(4).default('✅'),
+  difficulty: z.enum(['easy', 'medium', 'hard']).default('medium'),
+  block: z.enum(['morning', 'afternoon', 'evening', 'anytime']).default('anytime'),
+  colocId: z.string({ error: 'Colocation requise' }).min(1, 'Colocation requise'),
+})
+
 // --- Créer une dépense ---
 export const createExpenseSchema = z.object({
   amount: z.number({ error: 'Montant requis' }).positive('Le montant doit être positif'),

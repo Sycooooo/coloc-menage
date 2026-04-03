@@ -92,6 +92,20 @@ export const ROOM_LABELS: Record<string, string> = {
   exterieur: 'Extérieur',
 }
 
+export const BLOCK_LABELS: Record<string, string> = {
+  morning: 'Matin',
+  afternoon: 'Après-midi',
+  evening: 'Soirée',
+  anytime: 'Tout moment',
+}
+
+export const BLOCK_ICONS: Record<string, string> = {
+  morning: '🌅',
+  afternoon: '☀️',
+  evening: '🌙',
+  anytime: '⏰',
+}
+
 export const RARITY_LABELS: Record<string, string> = {
   common: 'Commun',
   rare: 'Rare',

@@ -103,7 +103,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
   const base = `/coloc/${colocId}`
 
   const links = [
-    { href: base, label: 'Tâches', icon: '📋', unreadKey: 'tasks' as const, match: (p: string) => p === base },
+    { href: base, label: 'Tâches', icon: '📋', unreadKey: 'tasks' as const, match: (p: string) => p === base || p.includes('/habits') },
     { href: `${base}/chat`, label: 'Chat', icon: '💬', unreadKey: 'chat' as const, match: (p: string) => p.includes('/chat') },
     { href: `${base}/board`, label: 'Tableau', icon: '📌', unreadKey: 'board' as const, match: (p: string) => p.includes('/board') },
     { href: `${base}/calendar`, label: 'Calendrier', icon: '📅', unreadKey: null, match: (p: string) => p.includes('/calendar') },

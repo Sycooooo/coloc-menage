@@ -39,6 +39,8 @@ model User {
   seasonRecords     SeasonRecord[]
   spotifyAccount    SpotifyAccount?
   musicStories      MusicStory[]
+  habits            Habit[]
+  habitLogs         HabitLog[]
 }
 
 model Colocation {
@@ -64,6 +66,7 @@ model Colocation {
   placedFurniture PlacedFurniture[]
 
   musicStories    MusicStory[]
+  habits          Habit[]
 }
 
 model UserColoc {
@@ -429,6 +432,42 @@ model MusicStory {
   user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   colocId String
   coloc   Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+}
+
+// === Habits ===
+
+model Habit {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  icon        String    @default("✅")
+  difficulty  String    @default("medium")
+  block       String    @default("anytime")
+  isActive    Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  colocId     String
+  coloc       Colocation @relation(fields: [colocId], references: [id], onDelete: Cascade)
+
+  logs        HabitLog[]
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  date      DateTime
+  completed Boolean  @default(true)
+
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, userId, date])
 }
 
 // === Chat ===
