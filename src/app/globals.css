@@ -39,6 +39,69 @@
   --glow-pink: rgba(232, 67, 147, 0.15);
 }
 
+/* === Palettes contextuelles par pièce === */
+/* accueil = palette par défaut (violet/ambre), pas besoin de bloc */
+
+[data-room="salon"] {
+  --accent: #60a5fa;
+  --accent-hover: #3b82f6;
+  --accent-secondary: #f4b860;
+  --glow-accent: rgba(96, 165, 250, 0.15);
+  --shadow-glow: 0 0 25px rgba(96, 165, 250, 0.10);
+  --neon-text: 0 0 30px rgba(96, 165, 250, 0.25), 0 0 60px rgba(96, 165, 250, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(96, 165, 250, 0.04) 0%, transparent 50%, rgba(244, 184, 96, 0.03) 100%);
+}
+
+[data-room="chambre"] {
+  --accent: #818cf8;
+  --accent-hover: #6366f1;
+  --accent-secondary: #f9a8d4;
+  --glow-accent: rgba(129, 140, 248, 0.15);
+  --shadow-glow: 0 0 25px rgba(129, 140, 248, 0.10);
+  --neon-text: 0 0 30px rgba(129, 140, 248, 0.25), 0 0 60px rgba(129, 140, 248, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(129, 140, 248, 0.04) 0%, transparent 50%, rgba(249, 168, 212, 0.03) 100%);
+}
+
+[data-room="cuisine"] {
+  --accent: #d4943a;
+  --accent-hover: #b87a2e;
+  --accent-secondary: #34d399;
+  --glow-accent: rgba(212, 148, 58, 0.15);
+  --shadow-glow: 0 0 25px rgba(212, 148, 58, 0.10);
+  --neon-text: 0 0 30px rgba(212, 148, 58, 0.25), 0 0 60px rgba(212, 148, 58, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(212, 148, 58, 0.04) 0%, transparent 50%, rgba(52, 211, 153, 0.03) 100%);
+}
+
+[data-room="bureau"] {
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-secondary: #06b6d4;
+  --glow-accent: rgba(139, 92, 246, 0.15);
+  --shadow-glow: 0 0 25px rgba(139, 92, 246, 0.10);
+  --neon-text: 0 0 30px rgba(139, 92, 246, 0.25), 0 0 60px rgba(139, 92, 246, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(139, 92, 246, 0.04) 0%, transparent 50%, rgba(6, 182, 212, 0.03) 100%);
+}
+
+[data-room="studio"] {
+  --accent: #e84393;
+  --accent-hover: #d63384;
+  --accent-secondary: #06b6d4;
+  --glow-accent: rgba(232, 67, 147, 0.15);
+  --shadow-glow: 0 0 25px rgba(232, 67, 147, 0.10);
+  --neon-text: 0 0 30px rgba(232, 67, 147, 0.25), 0 0 60px rgba(232, 67, 147, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(232, 67, 147, 0.04) 0%, transparent 50%, rgba(6, 182, 212, 0.03) 100%);
+}
+
+[data-room="profil"] {
+  --accent: #f4b860;
+  --accent-hover: #e8a04c;
+  --accent-secondary: #c084fc;
+  --glow-accent: rgba(244, 184, 96, 0.15);
+  --shadow-glow: 0 0 25px rgba(244, 184, 96, 0.10);
+  --neon-text: 0 0 30px rgba(244, 184, 96, 0.25), 0 0 60px rgba(244, 184, 96, 0.10);
+  --card-shine: linear-gradient(135deg, rgba(244, 184, 96, 0.04) 0%, transparent 50%, rgba(192, 132, 252, 0.03) 100%);
+}
+
 /* === Tailwind theme tokens === */
 @theme inline {
   --color-background: var(--bg);

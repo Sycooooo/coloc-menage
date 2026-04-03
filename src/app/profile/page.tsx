@@ -36,7 +36,7 @@ export default async function ProfilePage() {
   const unlockedIds = new Set(user.achievements.map((a) => a.achievementId))
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen relative z-10" data-room="profil">
       <PageAmbiance theme="profil" />
       <header className="glass-header sticky top-0 z-40 px-6 py-4 flex items-center gap-3">
         <Link href="/" className="text-t-muted hover:text-t-primary transition">←</Link>

@@ -55,7 +55,7 @@ export default async function ColocPage({
   }) > 0
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen relative z-10" data-room="salon">
       <PageAmbiance theme="salon" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

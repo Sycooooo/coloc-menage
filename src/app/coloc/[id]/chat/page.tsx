@@ -44,7 +44,7 @@ export default async function ChatPage({
   }))
 
   return (
-    <div className="h-dvh flex flex-col relative z-10 overflow-hidden">
+    <div className="h-dvh flex flex-col relative z-10 overflow-hidden" data-room="chambre">
       <PageAmbiance theme="chambre" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center gap-3">
         <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">

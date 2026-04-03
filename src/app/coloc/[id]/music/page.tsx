@@ -52,7 +52,7 @@ export default async function MusicPage({
   }))
 
   return (
-    <div className="min-h-screen pb-20 relative z-10">
+    <div className="min-h-screen pb-20 relative z-10" data-room="studio">
       <PageAmbiance theme="studio" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

@@ -34,7 +34,7 @@ export default async function AdminPage({
   if (member.role !== 'admin') redirect(`/coloc/${id}`)
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen relative z-10" data-room="bureau">
       <PageAmbiance theme="bureau" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
