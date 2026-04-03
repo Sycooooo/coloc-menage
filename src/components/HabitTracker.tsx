@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { smooth, snappy, scaleBounce } from '@/lib/animations'
@@ -36,6 +36,24 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 }
 
 const BLOCK_ORDER = ['morning', 'afternoon', 'evening', 'anytime']
+
+const HABIT_SUGGESTIONS = [
+  { icon: '⏰', title: 'Se lever tôt', difficulty: 'medium', block: 'morning' },
+  { icon: '🧘', title: 'Méditer', difficulty: 'easy', block: 'morning' },
+  { icon: '🏃', title: 'Sport / Stretching', difficulty: 'medium', block: 'morning' },
+  { icon: '🚿', title: 'Douche froide', difficulty: 'hard', block: 'morning' },
+  { icon: '🥣', title: 'Petit-déjeuner sain', difficulty: 'easy', block: 'morning' },
+  { icon: '📖', title: 'Lire 20 min', difficulty: 'easy', block: 'evening' },
+  { icon: '✍️', title: 'Journaling', difficulty: 'easy', block: 'evening' },
+  { icon: '📵', title: 'Pas de réseaux sociaux', difficulty: 'hard', block: 'afternoon' },
+  { icon: '🧹', title: 'Ranger sa chambre', difficulty: 'easy', block: 'morning' },
+  { icon: '💧', title: 'Boire 2L d\'eau', difficulty: 'medium', block: 'anytime' },
+  { icon: '🎯', title: 'Deep work 90 min', difficulty: 'hard', block: 'afternoon' },
+  { icon: '🌙', title: 'Couché avant minuit', difficulty: 'medium', block: 'evening' },
+  { icon: '🚶', title: 'Marcher 30 min', difficulty: 'easy', block: 'anytime' },
+  { icon: '🍳', title: 'Cuisiner un repas', difficulty: 'medium', block: 'anytime' },
+  { icon: '🧘‍♂️', title: 'Pas de snooze', difficulty: 'hard', block: 'morning' },
+]
 
 function getWeekDays() {
   const now = new Date()
@@ -89,8 +107,10 @@ function getHabitStreak(logs: HabitLog[]) {
 export default function HabitTracker({ habits: initialHabits, colocId }: Props) {
   const router = useRouter()
   const [habits, setHabits] = useState(initialHabits)
+  useEffect(() => { setHabits(initialHabits) }, [initialHabits])
   const [toggling, setToggling] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const [popup, setPopup] = useState<{ habitId: string; xp: number; coins: number; streak: number } | null>(null)
   const [rankUp, setRankUp] = useState<{ type: string; newRank: Record<string, unknown> } | null>(null)
 
@@ -391,7 +411,52 @@ export default function HabitTracker({ habits: initialHabits, colocId }: Props) 
             className="rounded-xl border border-accent/20 p-5 overflow-hidden bg-[#161628]/95 backdrop-blur-xl"
             style={{ boxShadow: 'var(--shadow)' }}
           >
-            <h3 className="font-semibold text-t-primary mb-4">Nouvelle habitude</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-t-primary">Nouvelle habitude</h3>
+              <button
+                type="button"
+                onClick={() => setShowSuggestions(!showSuggestions)}
+                className={`text-xs px-3 py-1 rounded-full font-medium transition ${
+                  showSuggestions ? 'bg-accent/15 text-accent' : 'bg-surface-hover text-t-muted hover:text-t-primary'
+                }`}
+              >
+                💡 Idées
+              </button>
+            </div>
+
+            {/* Suggestions */}
+            <AnimatePresence>
+              {showSuggestions && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={snappy}
+                  className="overflow-hidden mb-3"
+                >
+                  <div className="flex flex-wrap gap-1.5">
+                    {HABIT_SUGGESTIONS.map((s) => (
+                      <button
+                        key={s.title}
+                        type="button"
+                        onClick={() => {
+                          setNewTitle(s.title)
+                          setNewIcon(s.icon)
+                          setNewDifficulty(s.difficulty)
+                          setNewBlock(s.block)
+                          setShowSuggestions(false)
+                        }}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium bg-[#161628]/80 border border-[var(--border)] text-t-muted hover:text-accent hover:border-accent/30 transition"
+                      >
+                        <span>{s.icon}</span>
+                        <span>{s.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="space-y-3">
               {/* Titre + Icône */}
               <div className="flex gap-2">
