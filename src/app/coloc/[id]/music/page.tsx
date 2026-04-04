@@ -8,7 +8,6 @@ import PixelIcon from '@/components/ui/PixelIcon'
 import MusicStories from '@/components/music/MusicStories'
 import NowPlaying from '@/components/music/NowPlaying'
 import TopArtists from '@/components/music/TopArtists'
-import StoryHistory from '@/components/music/StoryHistory'
 
 export default async function MusicPage({
   params,
@@ -81,8 +80,18 @@ export default async function MusicPage({
           {/* En ecoute */}
           <NowPlaying colocId={id} currentUserId={userId} members={membersForNowPlaying} hasSpotify={hasSpotify} />
 
-          {/* Historique stories */}
-          <StoryHistory colocId={id} />
+          {/* Lien Memories */}
+          <Link
+            href={`/coloc/${id}/music/memories`}
+            className="block card card-glow p-4 flex items-center gap-3 hover:scale-[1.01] transition-transform"
+          >
+            <span className="text-xl">📅</span>
+            <div className="flex-1">
+              <p className="font-semibold text-t-primary text-sm">Memories</p>
+              <p className="text-xs text-t-faint">Revois les sons partagés par la coloc</p>
+            </div>
+            <span className="text-t-faint text-sm">→</span>
+          </Link>
 
           {/* Top Artistes */}
           <TopArtists colocId={id} />
