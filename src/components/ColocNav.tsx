@@ -105,13 +105,8 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
   const base = `/coloc/${colocId}`
 
   const links: { href: string; label: string; pixelIcon: IconName; color: string; unreadKey: 'tasks' | 'chat' | 'board' | null; match: (p: string) => boolean }[] = [
-    { href: base, label: 'Tâches', pixelIcon: 'tasks', color: 'text-blue-400', unreadKey: 'tasks', match: (p) => p === base || p.includes('/habits') },
-    { href: `${base}/chat`, label: 'Social', pixelIcon: 'chat', color: 'text-indigo-400', unreadKey: 'chat', match: (p) => p.includes('/chat') || p.includes('/board') },
-    { href: `${base}/calendar`, label: 'Agenda', pixelIcon: 'calendar', color: 'text-cyan-400', unreadKey: null, match: (p) => p.includes('/calendar') },
-    { href: `${base}/music`, label: 'Music', pixelIcon: 'music', color: 'text-pink-400', unreadKey: null, match: (p) => p.includes('/music') },
-    { href: `${base}/menu`, label: 'Menu', pixelIcon: 'menu', color: 'text-amber-400', unreadKey: null, match: (p) => p.includes('/menu') },
-    { href: `${base}/expenses`, label: 'Argent', pixelIcon: 'expenses', color: 'text-emerald-400', unreadKey: null, match: (p) => p.includes('/expenses') },
-    { href: '/profile', label: 'Profil', pixelIcon: 'profile', color: 'text-purple-400', unreadKey: null, match: (p) => p.startsWith('/profile') },
+    { href: base, label: 'Home', pixelIcon: 'home', color: 'text-blue-400', unreadKey: null, match: (p) => p === base },
+    { href: `${base}/tasks`, label: 'Tâches', pixelIcon: 'tasks', color: 'text-indigo-400', unreadKey: 'tasks', match: (p) => p.includes('/tasks') || p.includes('/habits') },
   ]
 
   return (
@@ -143,7 +138,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
                 transition={bouncy}
                 className={`relative ${isActive ? link.color : ''}`}
               >
-                <PixelIcon name={link.pixelIcon} size={18} />
+                <PixelIcon name={link.pixelIcon} size={24} />
                 <AnimatePresence>
                   {hasUnread && (
                     <motion.span

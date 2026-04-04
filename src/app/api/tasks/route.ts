@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       colocId,
       'task_assigned',
       `${creator?.username} t'a assigné "${title}"`,
-      `/coloc/${colocId}`
+      `/coloc/${colocId}/tasks`
     )
   }
 

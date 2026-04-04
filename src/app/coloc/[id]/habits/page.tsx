@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import Link from 'next/link'
 import HabitTracker from '@/components/HabitTracker'
 import TabSwitcher from '@/components/TabSwitcher'
 import PageTransition from '@/components/PageTransition'
@@ -57,15 +58,17 @@ export default async function HabitsPage({
       <PageAmbiance theme="bureau" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
+          <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">
+            ←
+          </Link>
           <PixelIcon name="habits" size={24} className="text-orange-400" />
           <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
         </div>
-        <NotificationBell />
       </header>
 
       <TabSwitcher
         tabs={[
-          { key: 'tasks', label: '📋 Tâches', href: `/coloc/${id}` },
+          { key: 'tasks', label: '📋 Tâches', href: `/coloc/${id}/tasks` },
           { key: 'habits', label: '🔥 Habitudes', href: `/coloc/${id}/habits` },
         ]}
         active="habits"

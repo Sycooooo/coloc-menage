@@ -118,7 +118,7 @@ export async function POST(
     session.user.id,
     'task_completed',
     `${user.username} a terminé "${task.title}" !`,
-    `/coloc/${task.colocId}`
+    `/coloc/${task.colocId}/tasks`
   )
 
   // === Vérification des achievements ===

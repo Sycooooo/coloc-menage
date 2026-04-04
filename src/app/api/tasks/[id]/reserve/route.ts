@@ -63,7 +63,7 @@ export async function POST(
     userId,
     'task_assigned',
     `${user?.username} a réservé "${task.title}"`,
-    `/coloc/${task.colocId}`
+    `/coloc/${task.colocId}/tasks`
   )
 
   return NextResponse.json({ ...updated, action: 'reserved' })
