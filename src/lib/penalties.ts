@@ -26,6 +26,10 @@ export async function checkPenalties(colocId: string): Promise<PenaltyResult[]> 
   for (const member of activeMembers) {
     const user = member.user
 
+    // Période de grâce : pas de pénalités pendant 7 jours après avoir rejoint la coloc
+    const daysSinceJoined = Math.floor((today.getTime() - new Date(member.createdAt).getTime()) / (1000 * 60 * 60 * 24))
+    if (daysSinceJoined < 7) continue
+
     // === 3a. Tâches expirées → -70 XP chacune ===
     const expiredTasks = await prisma.task.findMany({
       where: {
