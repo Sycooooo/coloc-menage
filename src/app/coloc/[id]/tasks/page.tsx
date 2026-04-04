@@ -178,10 +178,12 @@ export default async function TasksPage({
           </Link>
         )}
 
-        <AddTaskForm
-          colocId={coloc.id}
-          members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.username }))}
-        />
+        {isAdmin && (
+          <AddTaskForm
+            colocId={coloc.id}
+            members={coloc.members.map((m) => ({ id: m.user.id, name: m.user.username }))}
+          />
+        )}
 
         <TaskList
           tasks={coloc.tasks}

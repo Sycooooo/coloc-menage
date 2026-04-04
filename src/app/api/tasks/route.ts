@@ -25,6 +25,9 @@ export async function POST(request: Request) {
   if (!membership) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
   }
+  if (membership.role !== 'admin') {
+    return NextResponse.json({ error: 'Seul l\'admin peut créer des tâches' }, { status: 403 })
+  }
 
   const task = await prisma.task.create({
     data: {
