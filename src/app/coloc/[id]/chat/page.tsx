@@ -52,7 +52,7 @@ export default async function ChatPage({
         <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">
           ←
         </Link>
-        <PixelIcon name="chat" size={24} className="text-accent" />
+        <PixelIcon name="chat" size={24} className="text-indigo-400" />
         <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
       </header>
       <TabSwitcher

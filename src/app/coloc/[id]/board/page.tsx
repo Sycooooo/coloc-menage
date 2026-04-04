@@ -36,7 +36,7 @@ export default async function BoardPage({
         <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">
           ←
         </Link>
-        <PixelIcon name="board" size={24} className="text-accent" />
+        <PixelIcon name="board" size={24} className="text-rose-400" />
         <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
       </header>
       <TabSwitcher

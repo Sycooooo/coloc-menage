@@ -104,19 +104,19 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
 
   const base = `/coloc/${colocId}`
 
-  const links: { href: string; label: string; pixelIcon: IconName; unreadKey: 'tasks' | 'chat' | 'board' | null; match: (p: string) => boolean }[] = [
-    { href: base, label: 'Tâches', pixelIcon: 'tasks', unreadKey: 'tasks', match: (p) => p === base || p.includes('/habits') },
-    { href: `${base}/chat`, label: 'Social', pixelIcon: 'chat', unreadKey: 'chat', match: (p) => p.includes('/chat') || p.includes('/board') },
-    { href: `${base}/calendar`, label: 'Agenda', pixelIcon: 'calendar', unreadKey: null, match: (p) => p.includes('/calendar') },
-    { href: `${base}/music`, label: 'Music', pixelIcon: 'music', unreadKey: null, match: (p) => p.includes('/music') },
-    { href: `${base}/menu`, label: 'Menu', pixelIcon: 'menu', unreadKey: null, match: (p) => p.includes('/menu') },
-    { href: `${base}/expenses`, label: 'Argent', pixelIcon: 'expenses', unreadKey: null, match: (p) => p.includes('/expenses') },
-    { href: '/profile', label: 'Profil', pixelIcon: 'profile', unreadKey: null, match: (p) => p.startsWith('/profile') },
+  const links: { href: string; label: string; pixelIcon: IconName; color: string; unreadKey: 'tasks' | 'chat' | 'board' | null; match: (p: string) => boolean }[] = [
+    { href: base, label: 'Tâches', pixelIcon: 'tasks', color: 'text-blue-400', unreadKey: 'tasks', match: (p) => p === base || p.includes('/habits') },
+    { href: `${base}/chat`, label: 'Social', pixelIcon: 'chat', color: 'text-indigo-400', unreadKey: 'chat', match: (p) => p.includes('/chat') || p.includes('/board') },
+    { href: `${base}/calendar`, label: 'Agenda', pixelIcon: 'calendar', color: 'text-cyan-400', unreadKey: null, match: (p) => p.includes('/calendar') },
+    { href: `${base}/music`, label: 'Music', pixelIcon: 'music', color: 'text-pink-400', unreadKey: null, match: (p) => p.includes('/music') },
+    { href: `${base}/menu`, label: 'Menu', pixelIcon: 'menu', color: 'text-amber-400', unreadKey: null, match: (p) => p.includes('/menu') },
+    { href: `${base}/expenses`, label: 'Argent', pixelIcon: 'expenses', color: 'text-emerald-400', unreadKey: null, match: (p) => p.includes('/expenses') },
+    { href: '/profile', label: 'Profil', pixelIcon: 'profile', color: 'text-purple-400', unreadKey: null, match: (p) => p.startsWith('/profile') },
   ]
 
   return (
     <nav aria-label="Navigation principale" className="fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a14]/55 backdrop-blur-2xl border-t border-[rgba(192,132,252,0.08)]" style={{ boxShadow: '0 -4px 20px rgba(0,0,0,0.3)' }}>
-      <div className="flex items-center justify-around max-w-lg mx-auto py-1.5">
+      <div className="flex items-center justify-around max-w-lg mx-auto py-3 sm:py-1.5">
         {links.map((link) => {
           const isActive = link.match(pathname)
           const hasUnread = link.unreadKey ? unread[link.unreadKey] : false
@@ -126,7 +126,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
               href={link.href}
               prefetch
               aria-current={isActive ? 'page' : undefined}
-              className={`relative flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition ${
+              className={`relative flex flex-col items-center gap-1 px-3 py-2 sm:px-2 sm:py-1 sm:gap-0.5 rounded-lg transition ${
                 isActive ? 'text-accent' : 'text-t-muted hover:text-t-primary'
               }`}
             >
@@ -141,7 +141,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
               <motion.span
                 animate={{ scale: isActive ? 1.15 : 1 }}
                 transition={bouncy}
-                className={`relative ${isActive ? 'drop-shadow-[0_0_6px_rgba(192,132,252,0.4)]' : ''}`}
+                className={`relative ${isActive ? link.color : ''}`}
               >
                 <PixelIcon name={link.pixelIcon} size={18} />
                 <AnimatePresence>

@@ -60,7 +60,7 @@ export default async function ColocPage({
       <PageAmbiance theme="salon" />
       <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <PixelIcon name="home" size={24} className="text-accent" />
+          <PixelIcon name="home" size={24} className="text-blue-400" />
           <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
         </div>
         <div className="flex items-center gap-2">

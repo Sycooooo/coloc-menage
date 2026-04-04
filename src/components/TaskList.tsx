@@ -133,7 +133,7 @@ export default function TaskList({
     newRank: RankInfo
   } | null>(null)
 
-  const pending = tasks.filter((t) => t.status === 'pending')
+  const pending = tasks.filter((t) => t.status === 'pending' && (!t.assignedTo || t.assignedTo.id === currentUserId))
   const done = tasks.filter((t) => t.status === 'done')
 
   async function completeTask(taskId: string) {

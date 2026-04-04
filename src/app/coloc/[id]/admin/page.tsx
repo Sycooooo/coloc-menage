@@ -42,7 +42,7 @@ export default async function AdminPage({
           <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">
             ←
           </Link>
-          <PixelIcon name="admin" size={24} className="text-accent" />
+          <PixelIcon name="admin" size={24} className="text-gray-400" />
           <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">Admin — {coloc.name}</h1>
         </div>
       </header>
