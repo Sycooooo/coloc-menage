@@ -135,36 +135,6 @@ export default function DashboardHub(props: Props) {
   return (
     <motion.div {...stagger} initial="initial" animate="animate" className="space-y-3">
 
-      {/* Briefing du jour */}
-      {latestBriefing && (
-        <motion.div {...fadeIn}>
-          <Link href={`/coloc/${colocId}/briefing`} className="block">
-            <div className="card card-glow p-4 border border-purple-500/20">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">📡</span>
-                  <span className="text-sm font-semibold text-t-primary">Briefing du jour</span>
-                </div>
-                {latestBriefing.score > 0 && (
-                  <span className="font-pixel text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-                    {latestBriefing.score}/10
-                  </span>
-                )}
-              </div>
-              <div className="space-y-1">
-                {latestBriefing.sections.map((s) => (
-                  <div key={s.type} className="flex items-center gap-2">
-                    <span className="text-xs">{s.icon}</span>
-                    <span className="text-xs text-t-muted truncate">{s.articles[0]?.title}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-[10px] text-accent mt-2">Voir le briefing complet →</p>
-            </div>
-          </Link>
-        </motion.div>
-      )}
-
       {/* Profil */}
       <motion.div {...fadeIn}>
         <Link href="/profile" className="block">
@@ -405,6 +375,36 @@ export default function DashboardHub(props: Props) {
               ))}
             </div>
           </div>
+        </motion.div>
+      )}
+
+      {/* Briefing du jour */}
+      {latestBriefing && (
+        <motion.div {...fadeIn}>
+          <Link href={`/coloc/${colocId}/briefing`} className="block">
+            <div className="card card-glow p-4 border border-purple-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">📡</span>
+                  <span className="text-sm font-semibold text-t-primary">Briefing du jour</span>
+                </div>
+                {latestBriefing.score > 0 && (
+                  <span className="font-pixel text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                    {latestBriefing.score}/10
+                  </span>
+                )}
+              </div>
+              <div className="space-y-1">
+                {latestBriefing.sections.map((s) => (
+                  <div key={s.type} className="flex items-center gap-2">
+                    <span className="text-xs">{s.icon}</span>
+                    <span className="text-xs text-t-muted truncate">{s.articles[0]?.title}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-accent mt-2">Voir le briefing complet →</p>
+            </div>
+          </Link>
         </motion.div>
       )}
 

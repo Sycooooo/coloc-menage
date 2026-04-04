@@ -3,7 +3,6 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import PageTransition from '@/components/PageTransition'
-import PageAmbiance from '@/components/ui/PageAmbiance'
 import BriefingView from '@/components/BriefingView'
 
 const DAYS_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
@@ -65,9 +64,8 @@ export default async function BriefingDetailPage({
   const sources = (briefing.sources || []) as unknown as Parameters<typeof BriefingView>[0]['sources']
 
   return (
-    <div className="min-h-screen relative z-10" data-room="bureau">
-      <PageAmbiance theme="bureau" />
-      <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center gap-3">
+    <div className="min-h-screen relative z-10 bg-[#0a0a14]">
+      <header className="sticky top-0 z-40 px-6 py-4 flex items-center gap-3 bg-[#0a0a14] border-b border-[#252a38]">
         <Link href={`/coloc/${id}/briefing`} className="text-t-muted hover:text-t-primary transition">
           ←
         </Link>
@@ -78,7 +76,7 @@ export default async function BriefingDetailPage({
       </header>
 
       {/* Navigation prev/next */}
-      <div className="flex items-center justify-between px-6 py-2 border-b border-[var(--border)]">
+      <div className="flex items-center justify-between px-6 py-2 border-b border-[#252a38] bg-[#0a0a14]">
         {prev ? (
           <Link href={`/coloc/${id}/briefing/${formatDateSlug(prev.date)}`} className="text-xs text-accent hover:underline">
             ← Jour précédent

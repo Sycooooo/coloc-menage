@@ -90,7 +90,7 @@ function ArticleCard({ article, colors }: { article: Article; colors: (typeof SE
 
           {/* Historical context */}
           {article.histBox && (
-            <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 border-l-2 border-l-amber-400">
+            <div className="rounded-lg border border-[#3d2f0a] bg-[#171308] p-3 border-l-2 border-l-amber-400">
               <p className="font-pixel text-[9px] text-amber-400 uppercase tracking-wider mb-2">Contexte historique</p>
               <p className="text-xs text-t-muted leading-relaxed">{renderMarkdown(article.histBox)}</p>
             </div>
@@ -100,13 +100,13 @@ function ArticleCard({ article, colors }: { article: Article; colors: (typeof SE
           {(article.winners || article.losers) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {article.winners && (
-                <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+                <div className="rounded-lg border border-[#1a3d2e] bg-[#0d1a16] p-3">
                   <p className="font-pixel text-[9px] text-emerald-400 uppercase tracking-wider mb-2">Renforcé(s)</p>
                   <p className="text-xs text-t-muted leading-relaxed">{renderMarkdown(article.winners)}</p>
                 </div>
               )}
               {article.losers && (
-                <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-3">
+                <div className="rounded-lg border border-[#3d1a1a] bg-[#1a0d0d] p-3">
                   <p className="font-pixel text-[9px] text-red-400 uppercase tracking-wider mb-2">Affaibli(s)</p>
                   <p className="text-xs text-t-muted leading-relaxed">{renderMarkdown(article.losers)}</p>
                 </div>
@@ -116,7 +116,7 @@ function ArticleCard({ article, colors }: { article: Article; colors: (typeof SE
 
           {/* Impact / So What */}
           {article.impact && (
-            <div className={`rounded-lg border ${colors.border} ${colors.bg} p-3 border-l-2`} style={{ borderLeftColor: 'currentColor' }}>
+            <div className={`rounded-lg border ${colors.border} ${colors.solidBg} p-3 border-l-2`} style={{ borderLeftColor: 'currentColor' }}>
               <p className={`font-pixel text-[9px] ${colors.text} uppercase tracking-wider mb-2`}>So What ?</p>
               <p className="text-xs text-t-muted leading-relaxed">{renderMarkdown(article.impact)}</p>
             </div>
@@ -135,7 +135,7 @@ export default function BriefingView({ sections, sources, evalText, score }: Pro
     <div className="space-y-6">
       {/* Score badge */}
       <div className="flex items-center gap-3">
-        <span className="font-pixel text-[10px] px-2 py-1 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+        <span className="font-pixel text-[10px] px-2 py-1 rounded border border-[#1a3d2e] bg-[#0d1a16] text-emerald-400">
           SIA {score}/10
         </span>
         <span className="text-xs text-t-faint">Intelligence Stratégique & Géopolitique</span>

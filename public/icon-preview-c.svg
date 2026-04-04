@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <filter id="neon" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="neon-sm" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="ambient" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0a0a14"/>
+
+  <!-- Ambient glow -->
+  <g filter="url(#ambient)">
+    <ellipse cx="256" cy="270" rx="180" ry="160" fill="#c084fc" opacity="0.08"/>
+  </g>
+
+  <!-- ===== FEUILLE PIXEL + COURONNE ===== -->
+
+  <!-- Mini crown in amber above leaf -->
+  <!-- 5 cols x 3 rows, px=20, rect=18, ox=206, oy=47 -->
+  <g filter="url(#neon)" fill="#f4b860">
+    <!-- R0: 3 points -->
+    <rect x="206" y="47" width="18" height="18"/>
+    <rect x="246" y="47" width="18" height="18"/>
+    <rect x="286" y="47" width="18" height="18"/>
+    <!-- R1: full bar -->
+    <rect x="206" y="67" width="18" height="18"/>
+    <rect x="226" y="67" width="18" height="18"/>
+    <rect x="246" y="67" width="18" height="18"/>
+    <rect x="266" y="67" width="18" height="18"/>
+    <rect x="286" y="67" width="18" height="18"/>
+    <!-- R2: base -->
+    <rect x="226" y="87" width="18" height="18"/>
+    <rect x="246" y="87" width="18" height="18"/>
+    <rect x="266" y="87" width="18" height="18"/>
+  </g>
+
+  <!-- Leaf body in violet -->
+  <!-- 9 cols x 13 rows, px=26, rect=24, ox=139, oy=127 -->
+  <g filter="url(#neon)" fill="#c084fc">
+    <!-- R0: tip -->
+    <rect x="243" y="127" width="24" height="24"/>
+    <!-- R1 -->
+    <rect x="217" y="153" width="24" height="24"/>
+    <rect x="243" y="153" width="24" height="24"/>
+    <rect x="269" y="153" width="24" height="24"/>
+    <!-- R2 -->
+    <rect x="191" y="179" width="24" height="24"/>
+    <rect x="217" y="179" width="24" height="24"/>
+    <rect x="243" y="179" width="24" height="24"/>
+    <rect x="269" y="179" width="24" height="24"/>
+    <rect x="295" y="179" width="24" height="24"/>
+    <!-- R3: sides + vein -->
+    <rect x="165" y="205" width="24" height="24"/>
+    <rect x="191" y="205" width="24" height="24"/>
+    <rect x="243" y="205" width="24" height="24"/>
+    <rect x="295" y="205" width="24" height="24"/>
+    <rect x="321" y="205" width="24" height="24"/>
+    <!-- R4: widest + vein -->
+    <rect x="139" y="231" width="24" height="24"/>
+    <rect x="165" y="231" width="24" height="24"/>
+    <rect x="243" y="231" width="24" height="24"/>
+    <rect x="321" y="231" width="24" height="24"/>
+    <rect x="347" y="231" width="24" height="24"/>
+    <!-- R5: tips + vein -->
+    <rect x="139" y="257" width="24" height="24"/>
+    <rect x="243" y="257" width="24" height="24"/>
+    <rect x="347" y="257" width="24" height="24"/>
+    <!-- R6: closing + vein -->
+    <rect x="139" y="283" width="24" height="24"/>
+    <rect x="165" y="283" width="24" height="24"/>
+    <rect x="243" y="283" width="24" height="24"/>
+    <rect x="321" y="283" width="24" height="24"/>
+    <rect x="347" y="283" width="24" height="24"/>
+    <!-- R7 -->
+    <rect x="165" y="309" width="24" height="24"/>
+    <rect x="191" y="309" width="24" height="24"/>
+    <rect x="243" y="309" width="24" height="24"/>
+    <rect x="295" y="309" width="24" height="24"/>
+    <rect x="321" y="309" width="24" height="24"/>
+    <!-- R8 -->
+    <rect x="191" y="335" width="24" height="24"/>
+    <rect x="217" y="335" width="24" height="24"/>
+    <rect x="243" y="335" width="24" height="24"/>
+    <rect x="269" y="335" width="24" height="24"/>
+    <rect x="295" y="335" width="24" height="24"/>
+    <!-- R9 -->
+    <rect x="217" y="361" width="24" height="24"/>
+    <rect x="243" y="361" width="24" height="24"/>
+    <rect x="269" y="361" width="24" height="24"/>
+    <!-- R10: stem start -->
+    <rect x="243" y="387" width="24" height="24"/>
+    <!-- R11: stem -->
+    <rect x="243" y="413" width="24" height="24"/>
+    <!-- R12: stem base (roots) -->
+    <rect x="217" y="439" width="24" height="24"/>
+    <rect x="243" y="439" width="24" height="24"/>
+    <rect x="269" y="439" width="24" height="24"/>
+  </g>
+
+  <!-- Sparkles amber around leaf -->
+  <g fill="#f4b860" filter="url(#neon-sm)">
+    <!-- Top-left sparkle -->
+    <rect x="100" y="110" width="8" height="8"/>
+    <rect x="92" y="118" width="8" height="8"/>
+    <rect x="100" y="118" width="8" height="8"/>
+    <rect x="108" y="118" width="8" height="8"/>
+    <rect x="100" y="126" width="8" height="8"/>
+
+    <!-- Top-right sparkle -->
+    <rect x="400" y="100" width="6" height="6"/>
+    <rect x="394" y="106" width="6" height="6"/>
+    <rect x="400" y="106" width="6" height="6"/>
+    <rect x="406" y="106" width="6" height="6"/>
+    <rect x="400" y="112" width="6" height="6"/>
+
+    <!-- Bottom sparkle -->
+    <rect x="380" y="390" width="7" height="7"/>
+    <rect x="373" y="397" width="7" height="7"/>
+    <rect x="380" y="397" width="7" height="7"/>
+    <rect x="387" y="397" width="7" height="7"/>
+    <rect x="380" y="404" width="7" height="7"/>
+  </g>
+
+  <!-- Tiny pink accents -->
+  <g fill="#f472b6" opacity="0.6" filter="url(#neon-sm)">
+    <rect x="70" y="350" width="5" height="5"/>
+    <rect x="440" y="280" width="4" height="4"/>
+    <rect x="120" y="450" width="4" height="4"/>
+    <rect x="430" y="460" width="5" height="5"/>
+  </g>
+</svg>

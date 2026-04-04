@@ -3,7 +3,6 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import PageTransition from '@/components/PageTransition'
-import PageAmbiance from '@/components/ui/PageAmbiance'
 
 const DAYS_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 const MONTHS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
@@ -26,10 +25,10 @@ function formatDateSlug(date: Date) {
 }
 
 function scoreColor(score: number) {
-  if (score >= 8.5) return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
-  if (score >= 7) return 'text-blue-400 border-blue-500/30 bg-blue-500/10'
-  if (score >= 5) return 'text-amber-400 border-amber-500/30 bg-amber-500/10'
-  return 'text-t-faint border-[var(--border)] bg-[var(--surface)]'
+  if (score >= 8.5) return 'text-emerald-400 border-[#1a3d2e] bg-[#0d1a16]'
+  if (score >= 7) return 'text-blue-400 border-[#1e3a5f] bg-[#0f1a2e]'
+  if (score >= 5) return 'text-amber-400 border-[#3d2f0a] bg-[#171308]'
+  return 'text-t-faint border-[#252a38] bg-[#161628]'
 }
 
 export default async function BriefingArchivePage({
@@ -59,9 +58,8 @@ export default async function BriefingArchivePage({
   })
 
   return (
-    <div className="min-h-screen relative z-10" data-room="bureau">
-      <PageAmbiance theme="bureau" />
-      <header className="glass-header-lofi sticky top-0 z-40 px-6 py-4 flex items-center gap-3">
+    <div className="min-h-screen relative z-10 bg-[#0a0a14]">
+      <header className="sticky top-0 z-40 px-6 py-4 flex items-center gap-3 bg-[#0a0a14] border-b border-[#252a38]">
         <Link href={`/coloc/${id}`} className="text-t-muted hover:text-t-primary transition">
           ←
         </Link>
@@ -79,7 +77,7 @@ export default async function BriefingArchivePage({
                 const sections = b.sections as unknown as SectionSummary[]
                 return (
                   <Link key={b.id} href={`/coloc/${id}/briefing/${formatDateSlug(b.date)}`} className="block">
-                    <div className="card card-glow p-4 hover:border-accent/30 transition">
+                    <div className="p-4 rounded-lg border border-[#252a38] bg-[#161628] hover:bg-[#1e1e38] transition">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-semibold text-t-primary">{formatDate(b.date)}</span>
                         {b.score > 0 && (

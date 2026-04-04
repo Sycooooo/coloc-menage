@@ -24,10 +24,18 @@ export async function GET() {
 }
 
 // POST — Créer un briefing à partir de HTML brut
+// Auth: soit session NextAuth, soit header X-API-Key
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  const apiKey = req.headers.get('x-api-key')
+  const validApiKey = process.env.BRIEFING_API_KEY
+
+  if (apiKey && validApiKey && apiKey === validApiKey) {
+    // OK — authentifié par clé API
+  } else {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    }
   }
 
   const { html } = await req.json()
