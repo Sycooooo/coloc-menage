@@ -6,6 +6,7 @@ import Board from '@/components/Board'
 import PageTransition from '@/components/PageTransition'
 import PageAmbiance from '@/components/ui/PageAmbiance'
 import PixelIcon from '@/components/ui/PixelIcon'
+import TabSwitcher from '@/components/TabSwitcher'
 
 export default async function BoardPage({
   params,
@@ -36,8 +37,15 @@ export default async function BoardPage({
           ←
         </Link>
         <PixelIcon name="board" size={24} className="text-accent" />
-        <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">Tableau — {coloc.name}</h1>
+        <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
       </header>
+      <TabSwitcher
+        tabs={[
+          { key: 'chat', label: '💬 Chat', href: `/coloc/${id}/chat` },
+          { key: 'board', label: '📌 Tableau', href: `/coloc/${id}/board` },
+        ]}
+        active="board"
+      />
 
       <main className="max-w-4xl mx-auto p-6">
         <PageTransition>

@@ -76,7 +76,13 @@ export default async function ColocPage({
         </div>
       </header>
 
-      <TabSwitcher colocId={id} active="tasks" />
+      <TabSwitcher
+        tabs={[
+          { key: 'tasks', label: '📋 Tâches', href: `/coloc/${id}` },
+          { key: 'habits', label: '🔥 Habitudes', href: `/coloc/${id}/habits` },
+        ]}
+        active="tasks"
+      />
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
         <PageTransition>

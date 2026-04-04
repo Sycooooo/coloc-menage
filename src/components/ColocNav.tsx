@@ -106,12 +106,11 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
 
   const links: { href: string; label: string; pixelIcon: IconName; unreadKey: 'tasks' | 'chat' | 'board' | null; match: (p: string) => boolean }[] = [
     { href: base, label: 'Tâches', pixelIcon: 'tasks', unreadKey: 'tasks', match: (p) => p === base || p.includes('/habits') },
-    { href: `${base}/chat`, label: 'Chat', pixelIcon: 'chat', unreadKey: 'chat', match: (p) => p.includes('/chat') },
-    { href: `${base}/board`, label: 'Tableau', pixelIcon: 'board', unreadKey: 'board', match: (p) => p.includes('/board') },
-    { href: `${base}/calendar`, label: 'Calendrier', pixelIcon: 'calendar', unreadKey: null, match: (p) => p.includes('/calendar') },
+    { href: `${base}/chat`, label: 'Social', pixelIcon: 'chat', unreadKey: 'chat', match: (p) => p.includes('/chat') || p.includes('/board') },
+    { href: `${base}/calendar`, label: 'Agenda', pixelIcon: 'calendar', unreadKey: null, match: (p) => p.includes('/calendar') },
     { href: `${base}/music`, label: 'Music', pixelIcon: 'music', unreadKey: null, match: (p) => p.includes('/music') },
     { href: `${base}/menu`, label: 'Menu', pixelIcon: 'menu', unreadKey: null, match: (p) => p.includes('/menu') },
-    { href: `${base}/expenses`, label: 'Dépenses', pixelIcon: 'expenses', unreadKey: null, match: (p) => p.includes('/expenses') },
+    { href: `${base}/expenses`, label: 'Argent', pixelIcon: 'expenses', unreadKey: null, match: (p) => p.includes('/expenses') },
     { href: '/profile', label: 'Profil', pixelIcon: 'profile', unreadKey: null, match: (p) => p.startsWith('/profile') },
   ]
 
@@ -125,6 +124,7 @@ export default function ColocNav({ colocId, currentUserId }: Props) {
             <Link
               key={link.href}
               href={link.href}
+              prefetch
               aria-current={isActive ? 'page' : undefined}
               className={`relative flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition ${
                 isActive ? 'text-accent' : 'text-t-muted hover:text-t-primary'

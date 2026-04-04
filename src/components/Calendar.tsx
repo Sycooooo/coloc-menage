@@ -191,7 +191,7 @@ export default function Calendar({ colocId }: { colocId: string }) {
         </div>
 
         {/* Grille 12 mois */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {Array.from({ length: 12 }).map((_, m) => {
             const firstDay = new Date(year, m, 1)
             const daysInMonth = new Date(year, m + 1, 0).getDate()

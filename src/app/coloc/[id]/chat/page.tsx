@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Chat from '@/components/Chat'
 import PageAmbiance from '@/components/ui/PageAmbiance'
 import PixelIcon from '@/components/ui/PixelIcon'
+import TabSwitcher from '@/components/TabSwitcher'
 
 export default async function ChatPage({
   params,
@@ -52,8 +53,15 @@ export default async function ChatPage({
           ←
         </Link>
         <PixelIcon name="chat" size={24} className="text-accent" />
-        <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name} — Chat</h1>
+        <h1 className="font-display text-2xl tracking-wide text-t-primary uppercase neon-title">{coloc.name}</h1>
       </header>
+      <TabSwitcher
+        tabs={[
+          { key: 'chat', label: '💬 Chat', href: `/coloc/${id}/chat` },
+          { key: 'board', label: '📌 Tableau', href: `/coloc/${id}/board` },
+        ]}
+        active="chat"
+      />
 
       <Chat
         colocId={id}

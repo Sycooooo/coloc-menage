@@ -63,7 +63,13 @@ export default async function HabitsPage({
         <NotificationBell />
       </header>
 
-      <TabSwitcher colocId={id} active="habits" />
+      <TabSwitcher
+        tabs={[
+          { key: 'tasks', label: '📋 Tâches', href: `/coloc/${id}` },
+          { key: 'habits', label: '🔥 Habitudes', href: `/coloc/${id}/habits` },
+        ]}
+        active="habits"
+      />
 
       <main className="max-w-4xl mx-auto p-6 space-y-6">
         <PageTransition>

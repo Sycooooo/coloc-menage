@@ -345,6 +345,38 @@ body::after {
   opacity: 0.7;
 }
 
+/* === Rain animation === */
+.rain-drop {
+  position: absolute;
+  top: -20px;
+  width: 1px;
+  height: 15px;
+  background: linear-gradient(to bottom, transparent, rgba(180, 200, 255, 0.6));
+  animation: rain-fall linear infinite;
+}
+
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* === Hide Next.js dev error indicator on mobile === */
+nextjs-portal {
+  display: none !important;
+}
+
 /* === Stat number style (monospace) === */
 .stat-number {
   font-family: var(--font-mono), 'Space Mono', monospace;
