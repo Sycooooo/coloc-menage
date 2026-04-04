@@ -27,7 +27,7 @@ export async function checkPenalties(colocId: string): Promise<PenaltyResult[]> 
     const user = member.user
 
     // Période de grâce : pas de pénalités pendant 7 jours après avoir rejoint la coloc
-    const daysSinceJoined = Math.floor((today.getTime() - new Date(member.createdAt).getTime()) / (1000 * 60 * 60 * 24))
+    const daysSinceJoined = Math.floor((today.getTime() - new Date(member.joinedAt).getTime()) / (1000 * 60 * 60 * 24))
     if (daysSinceJoined < 7) continue
 
     // === 3a. Tâches expirées → -70 XP chacune ===
