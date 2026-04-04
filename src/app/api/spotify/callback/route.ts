@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import { exchangeCode, getSpotifyProfile } from '@/lib/spotify'
 
@@ -14,17 +13,12 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${baseUrl}/profile/settings?spotify=error`)
   }
 
-  const cookieStore = await cookies()
-  const savedState = cookieStore.get('spotify_oauth_state')?.value
-  const userId = cookieStore.get('spotify_link_user')?.value
+  // Extraire le userId du state (format: uuid|userId)
+  const userId = state?.split('|')[1]
 
-  if (!code || !state || state !== savedState || !userId) {
+  if (!code || !state || !userId) {
     return NextResponse.redirect(`${baseUrl}/profile/settings?spotify=error`)
   }
-
-  // Nettoyer les cookies
-  cookieStore.delete('spotify_oauth_state')
-  cookieStore.delete('spotify_link_user')
 
   try {
     const tokens = await exchangeCode(code)
