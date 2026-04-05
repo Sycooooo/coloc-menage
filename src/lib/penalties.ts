@@ -30,13 +30,14 @@ export async function checkPenalties(colocId: string): Promise<PenaltyResult[]> 
     const daysSinceJoined = Math.floor((today.getTime() - new Date(member.joinedAt).getTime()) / (1000 * 60 * 60 * 24))
     if (daysSinceJoined < 7) continue
 
-    // === 3a. Tâches expirées → -70 XP chacune ===
+    // === 3a. Tâches expirées → -70 XP chacune (pas les daily, elles sont juste supprimées) ===
     const expiredTasks = await prisma.task.findMany({
       where: {
         colocId,
         assignedToId: user.id,
         status: 'pending',
         dueDate: { lt: today },
+        recurrence: { not: 'daily' },
       },
     })
 

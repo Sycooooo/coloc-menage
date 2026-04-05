@@ -18,6 +18,20 @@ export async function autoGenerateQuests(colocId: string) {
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
+  // Supprimer les quêtes quotidiennes non faites (périmées après 4h du matin)
+  const cutoff = new Date(today)
+  cutoff.setHours(4, 0, 0, 0)
+  if (now >= cutoff) {
+    await prisma.task.deleteMany({
+      where: {
+        colocId,
+        recurrence: 'daily',
+        status: 'pending',
+        dueDate: { lt: cutoff },
+      },
+    })
+  }
+
   // Déterminer ce qu'il faut générer
   const lastGen = coloc.lastQuestGen
   const lastGenDate = lastGen ? new Date(lastGen.getFullYear(), lastGen.getMonth(), lastGen.getDate()) : null

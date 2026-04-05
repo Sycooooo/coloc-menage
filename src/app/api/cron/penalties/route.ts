@@ -13,6 +13,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
+  // Supprimer les quêtes quotidiennes périmées (après 4h du matin)
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const cutoff = new Date(today)
+  cutoff.setHours(4, 0, 0, 0)
+  if (now >= cutoff) {
+    await prisma.task.deleteMany({
+      where: {
+        recurrence: 'daily',
+        status: 'pending',
+        dueDate: { lt: cutoff },
+      },
+    })
+  }
+
   // Récupérer toutes les colocs actives
   const colocs = await prisma.colocation.findMany({
     select: { id: true, name: true },
